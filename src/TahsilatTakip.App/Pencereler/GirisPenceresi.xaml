@@ -1,0 +1,40 @@
+<ui:FluentWindow x:Class="TahsilatTakip.App.Pencereler.GirisPenceresi"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Tahsilat Takip - Giriş" Width="420" SizeToContent="Height"
+                 WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+                 ExtendsContentIntoTitleBar="True" WindowBackdropType="Mica">
+    <StackPanel>
+        <ui:TitleBar Title="Tahsilat Takip" ShowMaximize="False" ShowMinimize="False" />
+        <StackPanel Margin="32,8,32,32">
+            <ui:SymbolIcon Symbol="Wallet24" FontSize="40" HorizontalAlignment="Left"
+                           Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+            <TextBlock x:Name="BaslikMetni" Text="Giriş yap" FontSize="24" FontWeight="SemiBold" Margin="0,8,0,4" />
+            <TextBlock x:Name="AciklamaMetni" TextWrapping="Wrap"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       Text="Kullanıcı adınız ve şifrenizle giriş yapın." />
+
+            <StackPanel x:Name="KurulumAlanlari" Visibility="Collapsed">
+                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ad soyad" />
+                <ui:TextBox x:Name="AdSoyadKutusu" PlaceholderText="Ör. Çınar Alioğlu" />
+            </StackPanel>
+
+            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Kullanıcı adı" />
+            <ui:TextBox x:Name="KullaniciAdiKutusu" Icon="{ui:SymbolIcon Person24}" />
+
+            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Şifre" />
+            <PasswordBox x:Name="SifreKutusu" />
+
+            <StackPanel x:Name="SifreTekrarAlani" Visibility="Collapsed">
+                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Şifre (tekrar)" />
+                <PasswordBox x:Name="SifreTekrarKutusu" />
+            </StackPanel>
+
+            <ui:InfoBar x:Name="HataCubugu" Severity="Error" IsClosable="False" Margin="0,12,0,0" />
+
+            <ui:Button x:Name="GirisDugmesi" Content="Giriş yap" Appearance="Primary" IsDefault="True"
+                       HorizontalAlignment="Stretch" Margin="0,16,0,0" Padding="0,8" Click="Giris_Click" />
+        </StackPanel>
+    </StackPanel>
+</ui:FluentWindow>

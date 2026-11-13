@@ -1,0 +1,221 @@
+<ui:FluentWindow x:Class="TahsilatTakip.App.Pencereler.MukellefKartiPenceresi"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Mükellef kartı" Width="980" Height="720" MinWidth="820" MinHeight="560"
+                 WindowStartupLocation="CenterOwner"
+                 ExtendsContentIntoTitleBar="True" WindowBackdropType="Mica">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="{Binding PencereBasligi}" ShowMinimize="False" />
+
+        <!-- Üst bilgi -->
+        <DockPanel Grid.Row="1" Margin="24,4,24,8">
+            <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right"
+                        Visibility="{Binding YeniKayit, Converter={StaticResource BoolGizli}}">
+                <TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="Bakiye" />
+                <TextBlock HorizontalAlignment="Right" FontSize="24" FontWeight="SemiBold"
+                           Text="{Binding Bakiye, StringFormat={}{0:N2} ₺}"
+                           Foreground="{Binding Bakiye, Converter={StaticResource BakiyeRengi}}" />
+                <TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding CariDurum}" />
+            </StackPanel>
+            <TextBlock FontSize="22" FontWeight="SemiBold" TextWrapping="Wrap" VerticalAlignment="Center"
+                       Text="{Binding BaslikUnvan}" />
+        </DockPanel>
+
+        <TabControl Grid.Row="2" Margin="16,0,16,16" SelectedIndex="{Binding SeciliSekme}">
+            <!-- ================= Bilgiler ================= -->
+            <TabItem Header="Bilgiler">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ünvan / ad soyad *" />
+                                <ui:TextBox Text="{Binding Unvan, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="VKN / TCKN" />
+                                <ui:TextBox Text="{Binding VknTckn}" MaxLength="11" />
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Telefon" />
+                                <ui:TextBox Text="{Binding Telefon}" />
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="E-posta" />
+                                <ui:TextBox Text="{Binding Eposta}" />
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Adres" />
+                                <ui:TextBox Text="{Binding Adres}" AcceptsReturn="True" MinLines="2" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ödemeyi yapan kişi (mükellef değilse)" />
+                                <ui:TextBox Text="{Binding OdemeSorumlusuAd}" />
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ödeyen kişinin telefonu" />
+                                <ui:TextBox Text="{Binding OdemeSorumlusuTelefon}" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ödeme günü (1-31)" />
+                                        <ui:TextBox Text="{Binding OdemeGunu}" PlaceholderText="Boşsa ayın 1'i" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ödeme tercihi" />
+                                        <ComboBox ItemsSource="{Binding OdemeTercihleri}" SelectedItem="{Binding OdemeTercihi}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="12" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Durum" />
+                                        <ComboBox ItemsSource="{Binding Durumlar}" SelectedItem="{Binding Durum}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Visibility="{Binding AyrildiMi, Converter={StaticResource BoolGorunur}}">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ayrılış tarihi" />
+                                        <DatePicker SelectedDate="{Binding AyrilisTarihi}" />
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Text="Notlar" />
+                                <ui:TextBox Text="{Binding Notlar}" AcceptsReturn="True" MinLines="4" TextWrapping="Wrap"
+                                            VerticalScrollBarVisibility="Auto" MaxHeight="160" />
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                        <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon Save24}" Content="Kaydet"
+                                   Command="{Binding KaydetCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- ================= Ücret planları ================= -->
+            <TabItem Header="Ücretler" IsEnabled="{Binding YeniKayit, Converter={StaticResource BoolTers}}">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="0,0,0,8" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Ücret değiştiğinde (zam) eski planı silmeyin; yeni tutarla, geçerli olacağı aydan başlayan yeni bir plan ekleyin. Borçlar her dönemin bitiminden sonraki gün yazılır (Ekim ücreti 1 Kasım'da)." />
+                    <DataGrid Grid.Row="1" Style="{StaticResource Tablo}" ItemsSource="{Binding Planlar}" SelectedItem="{Binding SeciliPlan}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Hizmet" Binding="{Binding Hizmet}" Width="*" />
+                            <DataGridTextColumn Header="Periyot" Binding="{Binding Periyot, Converter={StaticResource EnumAciklama}}" Width="90" />
+                            <DataGridTextColumn Header="Tutar" Binding="{Binding Tutar, StringFormat=N2}" Width="110"
+                                                ElementStyle="{StaticResource SagaYasli}" />
+                            <DataGridTextColumn Header="Başlangıç" Binding="{Binding Baslangic}" Width="120" />
+                            <DataGridTextColumn Header="Bitiş" Binding="{Binding Bitis}" Width="150" />
+                            <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="2">
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <ui:Button Icon="{ui:SymbolIcon Delete24}" Content="Seçili planı sil" Command="{Binding PlanSilCommand}" />
+                            <TextBlock VerticalAlignment="Center" Margin="16,0,8,0" Text="Seçili planı durdur, son ay:" />
+                            <ComboBox Width="150" ItemsSource="{Binding Aylar}" SelectedItem="{Binding BitisAyi}" />
+                            <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Stop24}" Content="Durdur" Command="{Binding PlanBitirCommand}" />
+                        </StackPanel>
+                        <ui:Card Margin="0,12,0,0">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource AltBaslik}" Text="Yeni ücret planı / zam" />
+                                <WrapPanel>
+                                    <StackPanel Margin="0,0,12,0" Width="200">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Hizmet" />
+                                        <ComboBox ItemsSource="{Binding Hizmetler}" DisplayMemberPath="Ad" SelectedItem="{Binding YeniHizmet}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="0,0,12,0" Width="120">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Periyot" />
+                                        <ComboBox ItemsSource="{Binding Periyotlar}" SelectedItem="{Binding YeniPeriyot}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="0,0,12,0" Width="130">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Tutar (₺)" />
+                                        <ui:TextBox Text="{Binding YeniTutar}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="0,0,12,0" Width="150">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Başlangıç ayı" />
+                                        <ComboBox ItemsSource="{Binding Aylar}" SelectedItem="{Binding YeniBaslangic}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="0,0,12,0" Width="200">
+                                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Açıklama" />
+                                        <ui:TextBox Text="{Binding YeniAciklama}" />
+                                    </StackPanel>
+                                    <ui:Button VerticalAlignment="Bottom" Appearance="Primary" Icon="{ui:SymbolIcon Add24}"
+                                               Content="Ekle" Command="{Binding PlanEkleCommand}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </ui:Card>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- ================= Cari ekstre ================= -->
+            <TabItem Header="Cari ekstre" IsEnabled="{Binding YeniKayit, Converter={StaticResource BoolTers}}">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" Style="{StaticResource Tablo}" ItemsSource="{Binding Ekstre}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="100" />
+                            <DataGridTextColumn Header="Tür" Binding="{Binding Tur, Converter={StaticResource EnumAciklama}}" Width="70" />
+                            <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="*" />
+                            <DataGridTextColumn Header="Borç" Binding="{Binding Borc, StringFormat='{}{0:#,##0.00;;#}'}" Width="110"
+                                                ElementStyle="{StaticResource SagaYasli}" />
+                            <DataGridTextColumn Header="Ödeme" Binding="{Binding Odeme, StringFormat='{}{0:#,##0.00;;#}'}" Width="110"
+                                                ElementStyle="{StaticResource SagaYasli}" />
+                            <DataGridTemplateColumn Header="Bakiye" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Style="{StaticResource SagaYasli}" FontWeight="SemiBold"
+                                                   Text="{Binding Bakiye, StringFormat=N2}"
+                                                   Foreground="{Binding Bakiye, Converter={StaticResource BakiyeRengi}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <ui:Card Grid.Row="1" Margin="0,12,0,0">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource AltBaslik}" Text="Devir (açılış bakiyesi)" />
+                            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="Uygulamaya geçmeden önceki toplam borcu tek kalemde girin. Ör. geçiş ayı Kasım ise 31 Ekim itibarıyla kalan borç (Ekim ücreti dahil)." />
+                            <WrapPanel Margin="0,4,0,0">
+                                <StackPanel Margin="0,0,12,0" Width="150">
+                                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Tarih" />
+                                    <DatePicker SelectedDate="{Binding DevirTarihi}" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0" Width="130">
+                                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Tutar (₺)" />
+                                    <ui:TextBox Text="{Binding DevirTutari}" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,12,0" Width="280">
+                                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Açıklama" />
+                                    <ui:TextBox Text="{Binding DevirAciklama}" PlaceholderText="Devir (açılış bakiyesi)" />
+                                </StackPanel>
+                                <ui:Button VerticalAlignment="Bottom" Icon="{ui:SymbolIcon Add24}" Content="Devir ekle"
+                                           Command="{Binding DevirEkleCommand}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </ui:Card>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</ui:FluentWindow>

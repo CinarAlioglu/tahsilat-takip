@@ -1,0 +1,106 @@
+<Page x:Class="TahsilatTakip.App.Sayfalar.AyarlarSayfasi"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Ayarlar">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="0,0,8,0" MaxWidth="1000" HorizontalAlignment="Left">
+            <TextBlock Style="{StaticResource SayfaBasligi}" Text="Ayarlar" />
+
+            <!-- Aktarım -->
+            <ui:CardAction Icon="{ui:SymbolIcon ArrowImport24}" Command="{Binding AktarimAcCommand}">
+                <StackPanel>
+                    <TextBlock FontWeight="SemiBold" Text="Excel'den mükellef aktar" />
+                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Mükellef listesini ve ücretlerini Excel dosyasından içe aktarın." />
+                </StackPanel>
+            </ui:CardAction>
+
+            <!-- Kullanıcılar -->
+            <ui:Card Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource AltBaslik}" Text="Kullanıcılar" />
+                    <DataGrid Style="{StaticResource Tablo}" ItemsSource="{Binding Kullanicilar}" SelectedItem="{Binding SeciliKullanici}" MaxHeight="220">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Ad soyad" Binding="{Binding AdSoyad}" Width="*" />
+                            <DataGridTextColumn Header="Kullanıcı adı" Binding="{Binding KullaniciAdi}" Width="150" />
+                            <DataGridTextColumn Header="Rol" Binding="{Binding Rol, Converter={StaticResource EnumAciklama}}" Width="100" />
+                            <DataGridCheckBoxColumn Header="Aktif" Binding="{Binding Aktif}" Width="60" />
+                            <DataGridTextColumn Header="Son giriş" Binding="{Binding SonGirisTarihi, StringFormat=dd.MM.yyyy HH:mm}" Width="140" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Visibility="{Binding Yonetici, Converter={StaticResource BoolGorunur}}">
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <ui:Button Content="Seçiliyi aktif/pasif yap" Command="{Binding AktiflikDegistirCommand}" />
+                            <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Key24}" Content="Seçilinin şifresini sıfırla" Click="SifreSifirla_Click" />
+                            <PasswordBox x:Name="SifirlamaSifresi" Width="160" Margin="8,0,0,0" ToolTip="Yeni şifre" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,16,0,4" Text="Yeni kullanıcı" />
+                        <WrapPanel>
+                            <ui:TextBox Width="200" Margin="0,0,8,0" PlaceholderText="Ad soyad" Text="{Binding YeniAdSoyad}" />
+                            <ui:TextBox Width="150" Margin="0,0,8,0" PlaceholderText="Kullanıcı adı" Text="{Binding YeniKullaniciAdi}" />
+                            <PasswordBox x:Name="YeniSifre" Width="150" Margin="0,0,8,0" ToolTip="Şifre (en az 6 karakter)" VerticalContentAlignment="Center" />
+                            <ComboBox Width="130" Margin="0,0,8,0" ItemsSource="{Binding Roller}" SelectedItem="{Binding YeniRol}" />
+                            <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon PersonAdd24}" Content="Ekle" Click="KullaniciEkle_Click" />
+                        </WrapPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
+
+            <!-- Şifre değiştir -->
+            <ui:Card Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource AltBaslik}" Text="Şifremi değiştir" />
+                    <WrapPanel>
+                        <StackPanel Margin="0,0,8,0" Width="180">
+                            <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Mevcut şifre" />
+                            <PasswordBox x:Name="EskiSifre" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,8,0" Width="180">
+                            <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Yeni şifre" />
+                            <PasswordBox x:Name="YeniSifre1" />
+                        </StackPanel>
+                        <StackPanel Margin="0,0,8,0" Width="180">
+                            <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Yeni şifre (tekrar)" />
+                            <PasswordBox x:Name="YeniSifre2" />
+                        </StackPanel>
+                        <ui:Button VerticalAlignment="Bottom" Content="Değiştir" Click="SifreDegistir_Click" />
+                    </WrapPanel>
+                </StackPanel>
+            </ui:Card>
+
+            <!-- Yedekleme -->
+            <ui:Card Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource AltBaslik}" Text="Veri ve yedekleme" />
+                    <TextBlock TextWrapping="Wrap">
+                        <Run Text="Veri klasörü: " /><Run FontWeight="SemiBold" Text="{Binding VeriKlasoru, Mode=OneWay}" />
+                    </TextBlock>
+                    <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"
+                               Text="Uygulama her kapanışta otomatik yedek alır ve son 30 yedeği saklar. Bilgisayar arızasına karşı ek bir klasör (ör. Google Drive veya USB bellek) tanımlamanız önerilir." />
+                    <TextBlock Margin="0,4,0,0" Text="{Binding SonYedek}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <ui:Button Icon="{ui:SymbolIcon Save24}" Content="Şimdi yedekle" Command="{Binding YedekleCommand}" />
+                        <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon FolderOpen24}" Content="Veri klasörünü aç" Command="{Binding KlasoruAcCommand}" />
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ek yedek klasörü" />
+                    <DockPanel>
+                        <ui:Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Kaydet" Command="{Binding EkKlasorKaydetCommand}" />
+                        <ui:Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Gözat..." Command="{Binding EkKlasorSecCommand}" />
+                        <ui:TextBox PlaceholderText="Ör. G:\Drive'ım\Tahsilat Yedek" Text="{Binding EkKlasor}" />
+                    </DockPanel>
+                </StackPanel>
+            </ui:Card>
+
+            <!-- Görünüm -->
+            <ui:Card Margin="0,12,0,0">
+                <DockPanel>
+                    <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding KoyuTema}" />
+                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Koyu tema" />
+                </DockPanel>
+            </ui:Card>
+
+            <TextBlock Margin="0,12,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Surum}" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>
