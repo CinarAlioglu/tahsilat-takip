@@ -16,6 +16,14 @@
                 </StackPanel>
             </ui:CardAction>
 
+            <ui:CardAction Margin="0,8,0,0" Icon="{ui:SymbolIcon Money24}" Command="{Binding DevirAcCommand}">
+                <StackPanel>
+                    <TextBlock FontWeight="SemiBold" Text="Toplu devir girişi" />
+                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Uygulamaya geçmeden önceki kalan borçları tüm mükellefler için tek ekrandan girin." />
+                </StackPanel>
+            </ui:CardAction>
+
             <!-- Kullanıcılar -->
             <ui:Card Margin="0,12,0,0">
                 <StackPanel>
@@ -32,16 +40,29 @@
                     <StackPanel Visibility="{Binding Yonetici, Converter={StaticResource BoolGorunur}}">
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                             <ui:Button Content="Seçiliyi aktif/pasif yap" Command="{Binding AktiflikDegistirCommand}" />
-                            <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Key24}" Content="Seçilinin şifresini sıfırla" Click="SifreSifirla_Click" />
-                            <PasswordBox x:Name="SifirlamaSifresi" Width="160" Margin="8,0,0,0" ToolTip="Yeni şifre" />
+                            <TextBlock VerticalAlignment="Center" Margin="24,0,8,0" Text="Seçilinin yeni şifresi:" />
+                            <PasswordBox x:Name="SifirlamaSifresi" Width="160" VerticalContentAlignment="Center" />
+                            <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Key24}" Content="Şifreyi sıfırla" Click="SifreSifirla_Click" />
                         </StackPanel>
                         <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,16,0,4" Text="Yeni kullanıcı" />
                         <WrapPanel>
-                            <ui:TextBox Width="200" Margin="0,0,8,0" PlaceholderText="Ad soyad" Text="{Binding YeniAdSoyad}" />
-                            <ui:TextBox Width="150" Margin="0,0,8,0" PlaceholderText="Kullanıcı adı" Text="{Binding YeniKullaniciAdi}" />
-                            <PasswordBox x:Name="YeniSifre" Width="150" Margin="0,0,8,0" ToolTip="Şifre (en az 6 karakter)" VerticalContentAlignment="Center" />
-                            <ComboBox Width="130" Margin="0,0,8,0" ItemsSource="{Binding Roller}" SelectedItem="{Binding YeniRol}" />
-                            <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon PersonAdd24}" Content="Ekle" Click="KullaniciEkle_Click" />
+                            <StackPanel Width="200" Margin="0,0,8,0">
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Ad soyad" />
+                                <ui:TextBox Text="{Binding YeniAdSoyad}" />
+                            </StackPanel>
+                            <StackPanel Width="150" Margin="0,0,8,0">
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Kullanıcı adı" />
+                                <ui:TextBox Text="{Binding YeniKullaniciAdi}" />
+                            </StackPanel>
+                            <StackPanel Width="150" Margin="0,0,8,0">
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Şifre (en az 6)" />
+                                <PasswordBox x:Name="YeniSifre" />
+                            </StackPanel>
+                            <StackPanel Width="130" Margin="0,0,8,0">
+                                <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Rol" />
+                                <ComboBox ItemsSource="{Binding Roller}" SelectedItem="{Binding YeniRol}" />
+                            </StackPanel>
+                            <ui:Button VerticalAlignment="Bottom" Appearance="Primary" Icon="{ui:SymbolIcon PersonAdd24}" Content="Ekle" Click="KullaniciEkle_Click" />
                         </WrapPanel>
                     </StackPanel>
                 </StackPanel>
@@ -90,14 +111,6 @@
                         <ui:TextBox PlaceholderText="Ör. G:\Drive'ım\Tahsilat Yedek" Text="{Binding EkKlasor}" />
                     </DockPanel>
                 </StackPanel>
-            </ui:Card>
-
-            <!-- Görünüm -->
-            <ui:Card Margin="0,12,0,0">
-                <DockPanel>
-                    <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{Binding KoyuTema}" />
-                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Koyu tema" />
-                </DockPanel>
             </ui:Card>
 
             <TextBlock Margin="0,12,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="{Binding Surum}" />

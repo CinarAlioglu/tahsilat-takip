@@ -38,7 +38,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="95" />
-                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="*" />
+                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="2*" />
                 <DataGridTextColumn Header="Tutar" Binding="{Binding Tutar, StringFormat=N2}" Width="110"
                                     ElementStyle="{StaticResource SagaYasli}" />
                 <DataGridTextColumn Header="Yöntem" Binding="{Binding OdemeYontemi, Converter={StaticResource EnumAciklama}}" Width="95" />

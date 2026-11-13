@@ -29,6 +29,9 @@ public partial class App : Application
 
         DispatcherUnhandledException += BeklenmeyenHata;
 
+        // Windows koyu modda olsa da uygulama her zaman açık temayla açılır (tüm pencerelerde tutarlı görünüm).
+        Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Light, Wpf.Ui.Controls.WindowBackdropType.Mica, true);
+
         try
         {
             Servisler = ServisleriKur();

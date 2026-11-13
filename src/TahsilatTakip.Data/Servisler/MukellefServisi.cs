@@ -183,6 +183,47 @@ public sealed class MukellefServisi(VeritabaniFabrikasi fabrika)
         return (CariHesaplayici.Ekstre(borclar, odemeler), CariHesaplayici.Ozet(borclar, odemeler, bugun, m.OdemeGunu));
     }
 
+    /// <summary>Toplu devir girişi için aktif mükellefler, notları ve şimdiye kadar girilmiş devir toplamı.</summary>
+    public List<(int Id, string Unvan, string? Notlar, decimal MevcutDevir)> DevirListesi()
+    {
+        using var db = fabrika.Olustur();
+        var devirler = db.Tahakkuklar.AsNoTracking()
+            .Where(t => t.Kaynak == TahakkukKaynagi.Devir && !t.IptalEdildi)
+            .Select(t => new { t.MukellefId, t.Tutar }).ToList()
+            .GroupBy(t => t.MukellefId).ToDictionary(g => g.Key, g => g.Sum(t => t.Tutar));
+        return db.Mukellefler.AsNoTracking().Where(m => m.Durum != MukellefDurumu.Ayrildi).ToList()
+            .OrderBy(m => m.Unvan, Turkce.Karsilastirici)
+            .Select(m => (m.Id, m.Unvan, m.Notlar, devirler.GetValueOrDefault(m.Id)))
+            .ToList();
+    }
+
+    /// <summary>Birden çok mükellefe aynı tarihli devir borcu girer (tek işlemde).</summary>
+    public int TopluDevirGir(IEnumerable<(int MukellefId, decimal Tutar)> devirler, DateOnly tarih, int? kullaniciId)
+    {
+        var liste = devirler.Where(d => d.Tutar != 0).ToList();
+        if (liste.Any(d => d.Tutar < 0)) throw new IslemHatasi("Devir tutarı eksi olamaz. Fazla ödemeleri tahsilat olarak girin.");
+        using var db = fabrika.Olustur();
+        var simdi = DateTime.Now;
+        foreach (var (mukellefId, tutar) in liste)
+        {
+            db.Tahakkuklar.Add(new Tahakkuk
+            {
+                MukellefId = mukellefId,
+                HizmetTuruId = HizmetTuru.DevirId,
+                DonemBaslangic = tarih,
+                DonemBitis = tarih,
+                Tarih = tarih,
+                Tutar = tutar,
+                Aciklama = "Devir (açılış bakiyesi)",
+                Kaynak = TahakkukKaynagi.Devir,
+                OlusturanKullaniciId = kullaniciId,
+                OlusturmaTarihi = simdi,
+            });
+        }
+        db.SaveChanges();
+        return liste.Count;
+    }
+
     /// <summary>Uygulamaya geçişte mükellefin mevcut borcunu (veya alacağını) tek kalemde girer.</summary>
     public Tahakkuk DevirGir(int mukellefId, DateOnly tarih, decimal tutar, string? aciklama, int? kullaniciId)
     {

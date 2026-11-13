@@ -9,7 +9,6 @@ using TahsilatTakip.App.Yardimcilar;
 using TahsilatTakip.Core.Varliklar;
 using TahsilatTakip.Data;
 using TahsilatTakip.Data.Servisler;
-using Wpf.Ui.Appearance;
 
 namespace TahsilatTakip.App.Sayfalar;
 
@@ -72,10 +71,6 @@ public partial class AyarlarModeli(
     [ObservableProperty] private Secenek<KullaniciRolu> _yeniRol = Secenekler.Roller[0];
     [ObservableProperty] private string _sonYedek = "";
     [ObservableProperty] private string? _ekKlasor;
-    [ObservableProperty] private bool _koyuTema = ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Dark;
-
-    partial void OnKoyuTemaChanged(bool value) =>
-        ApplicationThemeManager.Apply(value ? ApplicationTheme.Dark : ApplicationTheme.Light);
 
     public void Yukle()
     {
@@ -93,6 +88,9 @@ public partial class AyarlarModeli(
 
     [RelayCommand]
     private void AktarimAc() => AktarimPenceresi.Ac();
+
+    [RelayCommand]
+    private void DevirAc() => DevirPenceresi.Ac();
 
     public void KullaniciEkle(string sifre)
     {

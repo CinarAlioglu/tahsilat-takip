@@ -73,7 +73,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="*" />
                             <DataGridTextColumn Header="Ücret" Binding="{Binding UcretBilgisi}" Width="160" />
-                            <DataGridTextColumn Header="Gecikme (gün)" Binding="{Binding GecikmeGunu}" Width="120"
+                            <DataGridTextColumn Header="Gecikme" Binding="{Binding GecikmeGunu, StringFormat='{}{0:0 gün;;#}'}" Width="120"
                                                 ElementStyle="{StaticResource SagaYasli}" />
                             <DataGridTextColumn Header="Bakiye" Binding="{Binding Bakiye, StringFormat=N2}" Width="140"
                                                 ElementStyle="{StaticResource SagaYasli}" />

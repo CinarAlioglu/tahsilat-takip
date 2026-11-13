@@ -41,7 +41,7 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Borç tarihi" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="100" />
-                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="*" />
+                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="2*" />
                 <DataGridTextColumn Header="Hizmet" Binding="{Binding Hizmet}" Width="150" />
                 <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="*" />
                 <DataGridTextColumn Header="Kaynak" Binding="{Binding Kaynak, Converter={StaticResource EnumAciklama}}" Width="80" />

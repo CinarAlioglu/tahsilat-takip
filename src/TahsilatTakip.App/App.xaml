@@ -18,6 +18,10 @@
             <y:BoolTersDonusturucu x:Key="BoolTers" />
             <y:BosDegilGorunurDonusturucu x:Key="DoluysaGorunur" />
 
+            <Style TargetType="DatePicker" BasedOn="{StaticResource {x:Type DatePicker}}">
+                <Setter Property="SelectedDateFormat" Value="Short" />
+            </Style>
+
             <Style x:Key="SayfaBasligi" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="26" />
                 <Setter Property="FontWeight" Value="SemiBold" />

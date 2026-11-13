@@ -181,6 +181,10 @@ public sealed class BoolTersDonusturucu : IValueConverter
 public static class PencereYardimcisi
 {
     /// <summary>Açılacak iletişim penceresinin sahibi: o an etkin pencere (yoksa ana pencere).</summary>
-    public static Window? Sahip() =>
-        Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive) ?? Application.Current.MainWindow;
+    public static Window? Sahip()
+    {
+        var acik = Application.Current.Windows.OfType<Window>().Where(w => w.IsVisible).ToList();
+        // Etkin pencere yoksa (ör. başka uygulamaya geçilmişse) en son açılan görünür pencere en üsttedir.
+        return acik.FirstOrDefault(w => w.IsActive) ?? acik.LastOrDefault() ?? Application.Current.MainWindow;
+    }
 }

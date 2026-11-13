@@ -13,7 +13,9 @@
             <TextBlock Style="{StaticResource AlanEtiketi}" Text="Mükellef *" />
             <ComboBox x:Name="MukellefKutusu" IsEditable="True" IsTextSearchEnabled="True" TextSearch.TextPath="Unvan"
                       ItemsSource="{Binding Mukellefler}" DisplayMemberPath="Unvan"
-                      SelectedItem="{Binding SeciliMukellef}" IsEnabled="{Binding MukellefSabit, Converter={StaticResource BoolTers}}" />
+                      SelectedItem="{Binding SeciliMukellef}" Visibility="{Binding MukellefSabit, Converter={StaticResource BoolGizli}}" />
+            <TextBlock FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding SeciliMukellef.Unvan}"
+                       Visibility="{Binding MukellefSabit, Converter={StaticResource BoolGorunur}}" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />

@@ -23,6 +23,8 @@
                       Content="Sadece borçlular" IsChecked="{Binding SadeceBorclular}" />
             <ui:Button DockPanel.Dock="Right" Appearance="Primary" Icon="{ui:SymbolIcon Add24}"
                        Content="Yeni mükellef" Command="{Binding YeniCommand}" />
+            <ui:Button DockPanel.Dock="Right" Margin="0,0,8,0" Icon="{ui:SymbolIcon Money24}"
+                       Content="Toplu devir girişi" Command="{Binding DevirCommand}" />
         </DockPanel>
 
         <DataGrid x:Name="Tablo" Grid.Row="2" Style="{StaticResource Tablo}"
@@ -34,7 +36,7 @@
                 <DataGridTextColumn Header="Ödeme" Binding="{Binding OdemeTercihi, Converter={StaticResource EnumAciklama}}" Width="80" />
                 <DataGridTextColumn Header="Grup" Binding="{Binding OdemeGrubu}" Width="120" />
                 <DataGridTextColumn Header="Durum" Binding="{Binding Durum, Converter={StaticResource EnumAciklama}}" Width="80" />
-                <DataGridTextColumn Header="Gecikme" Binding="{Binding GecikmeGunu, StringFormat={}{0} gün}" Width="90"
+                <DataGridTextColumn Header="Gecikme" Binding="{Binding GecikmeGunu, StringFormat='{}{0:0 gün;;#}'}" Width="90"
                                     ElementStyle="{StaticResource SagaYasli}" />
                 <DataGridTemplateColumn Header="Bakiye" Width="140" SortMemberPath="Bakiye">
                     <DataGridTemplateColumn.CellTemplate>

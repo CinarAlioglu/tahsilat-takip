@@ -77,6 +77,12 @@ public partial class MukelleflerModeli(MukellefServisi mukellefler) : Observable
     [RelayCommand]
     private void Yeni() => Ac(null);
 
+    [RelayCommand]
+    private void Devir()
+    {
+        if (DevirPenceresi.Ac()) Yukle();
+    }
+
     public void Ac(int? mukellefId)
     {
         if (MukellefKartiPenceresi.Ac(mukellefId)) Yukle();

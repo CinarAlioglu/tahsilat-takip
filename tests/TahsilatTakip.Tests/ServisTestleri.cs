@@ -241,3 +241,21 @@ public class TahsilatTestleri
         Assert.Throws<IslemHatasi>(() => servis.Ekle(new TahsilatGirdisi(m.Id, DateOnly.FromDateTime(DateTime.Today).AddDays(10), 10, OdemeYontemi.Nakit, null, null, null, null, null), null));
     }
 }
+
+public class DevirTestleri
+{
+    [Fact]
+    public void Toplu_devir_girilir()
+    {
+        using var o = new TestOrtami();
+        var servis = new MukellefServisi(o.Fabrika);
+        var a = servis.Kaydet(new Mukellef { Unvan = "A" });
+        var b = servis.Kaydet(new Mukellef { Unvan = "B" });
+        Assert.Equal(1, servis.TopluDevirGir([(a.Id, 11250m), (b.Id, 0m)], new DateOnly(2026, 10, 31), null));
+        Assert.Throws<IslemHatasi>(() => servis.TopluDevirGir([(b.Id, -5m)], new DateOnly(2026, 10, 31), null));
+        var liste = servis.DevirListesi();
+        Assert.Equal(11250m, liste.Single(x => x.Id == a.Id).MevcutDevir);
+        Assert.Equal(0m, liste.Single(x => x.Id == b.Id).MevcutDevir);
+        Assert.Equal(11250m, servis.Cari(a.Id, new DateOnly(2026, 11, 13)).Ozet.Bakiye);
+    }
+}
