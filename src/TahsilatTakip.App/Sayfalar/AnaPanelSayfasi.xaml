@@ -5,7 +5,11 @@
       Title="Ana panel">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="0,0,8,0">
-            <TextBlock Style="{StaticResource SayfaBasligi}" Text="Ana panel" />
+            <DockPanel>
+                <ui:Button DockPanel.Dock="Right" VerticalAlignment="Top" Appearance="Primary" Icon="{ui:SymbolIcon ReceiptMoney24}"
+                           Content="Tahsilat al" Command="{Binding TahsilatAlCommand}" />
+                <TextBlock Style="{StaticResource SayfaBasligi}" Text="Ana panel" />
+            </DockPanel>
 
             <UniformGrid Columns="4" Margin="-6,0">
                 <ui:Card Margin="6">

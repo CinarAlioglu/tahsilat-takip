@@ -76,12 +76,17 @@ public partial class App : Application
         s.AddSingleton<TahakkukServisi>();
         s.AddSingleton<ExcelAktarimServisi>();
         s.AddSingleton<YedekServisi>();
+        s.AddSingleton<TahsilatServisi>();
 
         s.AddTransient<GirisPenceresi>();
         s.AddTransient<AnaPencere>();
         s.AddTransient<AnaPanelSayfasi>();
         s.AddTransient<MukelleflerSayfasi>();
         s.AddTransient<AyarlarSayfasi>();
+        s.AddTransient<TahsilatlarSayfasi>();
+        s.AddTransient<BorclarSayfasi>();
+        s.AddTransient<TahsilatlarModeli>();
+        s.AddTransient<BorclarModeli>();
         s.AddTransient<AnaPanelModeli>();
         s.AddTransient<MukelleflerModeli>();
         s.AddTransient<AyarlarModeli>();

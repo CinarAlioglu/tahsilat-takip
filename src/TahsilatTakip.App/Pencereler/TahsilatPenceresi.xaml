@@ -1,0 +1,79 @@
+<ui:FluentWindow x:Class="TahsilatTakip.App.Pencereler.TahsilatPenceresi"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Tahsilat al" Width="620" SizeToContent="Height" ResizeMode="NoResize"
+                 WindowStartupLocation="CenterOwner"
+                 ExtendsContentIntoTitleBar="True" WindowBackdropType="Mica">
+    <StackPanel>
+        <ui:TitleBar Title="Tahsilat al" ShowMaximize="False" ShowMinimize="False" />
+        <StackPanel Margin="24,0,24,24">
+            <TextBlock Style="{StaticResource AlanEtiketi}" Margin="0,0,0,4" Text="Mükellef *" />
+            <ComboBox x:Name="MukellefKutusu" IsEditable="True" IsTextSearchEnabled="True" TextSearch.TextPath="Unvan"
+                      ItemsSource="{Binding Mukellefler}" DisplayMemberPath="Unvan"
+                      SelectedItem="{Binding SeciliMukellef}" IsEnabled="{Binding MukellefSabit, Converter={StaticResource BoolTers}}" />
+            <TextBlock Margin="0,6,0,0" FontWeight="SemiBold" Text="{Binding BakiyeMetni}"
+                       Foreground="{Binding SeciliMukellef.Bakiye, Converter={StaticResource BakiyeRengi}}" />
+
+            <Grid Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Tarih *" />
+                    <DatePicker SelectedDate="{Binding Tarih}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Tutar (₺) *" />
+                    <ui:TextBox x:Name="TutarKutusu" Text="{Binding Tutar, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ödeme yöntemi" />
+                    <ComboBox ItemsSource="{Binding Yontemler}" SelectedItem="{Binding Yontem}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Tahsil eden" />
+                    <ComboBox IsEditable="True" ItemsSource="{Binding TahsilEdenler}" Text="{Binding TahsilEden, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Style="{StaticResource AlanEtiketi}" Text="Paranın geldiği yer (kasa / hesap)" />
+                    <ComboBox IsEditable="True" ItemsSource="{Binding Hesaplar}" Text="{Binding Hesap, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ödeyen kişi (mükellef değilse)" />
+            <ui:TextBox Text="{Binding OdeyenKisi}" />
+
+            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Açıklama" />
+            <ui:TextBox Text="{Binding Aciklama}" />
+
+            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Dekont" />
+            <DockPanel>
+                <ui:Button DockPanel.Dock="Left" Icon="{ui:SymbolIcon Attach24}" Content="Dosya seç..." Command="{Binding DekontSecCommand}" />
+                <ui:Button DockPanel.Dock="Right" Appearance="Transparent" Icon="{ui:SymbolIcon Dismiss24}" ToolTip="Dekontu kaldır"
+                           Command="{Binding DekontKaldirCommand}" Visibility="{Binding Dekont, Converter={StaticResource DoluysaGorunur}}" />
+                <TextBlock Margin="12,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding DekontAdi}" />
+            </DockPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <ui:Button Content="Vazgeç" IsCancel="True" Margin="0,0,8,0" />
+                <ui:Button Content="Kaydet ve yeni" Margin="0,0,8,0" Command="{Binding KaydetCommand}" CommandParameter="yeni"
+                           Visibility="{Binding MukellefSabit, Converter={StaticResource BoolGizli}}" />
+                <ui:Button Content="Kaydet" Appearance="Primary" Icon="{ui:SymbolIcon Save24}" IsDefault="True"
+                           Command="{Binding KaydetCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</ui:FluentWindow>

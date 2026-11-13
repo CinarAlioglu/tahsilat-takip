@@ -179,3 +179,65 @@ public class ServisTestleri
         Assert.Equal("Yedeklenecek", kopya.Mukellefler.Single().Unvan);
     }
 }
+
+public class TahsilatTestleri
+{
+    [Fact]
+    public void Tahsilat_borcu_kapatir_ve_iptal_edilebilir()
+    {
+        using var o = new TestOrtami();
+        var mukellefler = new MukellefServisi(o.Fabrika);
+        var borclar = new TahakkukServisi(o.Fabrika);
+        var tahsilatlar = new TahsilatServisi(o.Fabrika, o.Yol);
+
+        var m = mukellefler.Kaydet(new Mukellef { Unvan = "Ödeyen Mükellef" });
+        borclar.ManuelEkle(m.Id, HizmetTuru.AylikMuhasebeUcretiId, new DateOnly(2026, 10, 1), 5000, "Eylül ücreti", null);
+        borclar.ManuelEkle(m.Id, HizmetTuru.DefterTasdikiId, new DateOnly(2026, 11, 1), 3000, "Defter tasdiki", null);
+
+        var t = tahsilatlar.Ekle(new TahsilatGirdisi(m.Id, new DateOnly(2026, 11, 5), 6000, OdemeYontemi.HavaleEft,
+            "Eleman", "Ziraat", "Eşi", null, null), null);
+
+        var liste = borclar.Listele(new BorcFiltresi());
+        Assert.Equal(0, liste.Single(b => b.Aciklama == "Eylül ücreti").Kalan);
+        Assert.Equal(2000, liste.Single(b => b.Aciklama == "Defter tasdiki").Kalan);
+        Assert.Single(borclar.Listele(new BorcFiltresi(SadeceAcik: true)));
+
+        Assert.Equal(2000, mukellefler.Cari(m.Id, new DateOnly(2026, 11, 13)).Ozet.Bakiye);
+        Assert.Contains("Eleman", tahsilatlar.TahsilEdenler());
+        Assert.Single(tahsilatlar.Listele(new TahsilatFiltresi(TahsilEden: "eleman")));
+
+        Assert.Throws<IslemHatasi>(() => tahsilatlar.IptalEt(t.Id, " ", null));
+        tahsilatlar.IptalEt(t.Id, "Yanlış mükellefe girildi", null);
+        Assert.Equal(8000, mukellefler.Cari(m.Id, new DateOnly(2026, 11, 13)).Ozet.Bakiye);
+        Assert.Empty(tahsilatlar.Listele(new TahsilatFiltresi()));
+        Assert.True(Assert.Single(tahsilatlar.Listele(new TahsilatFiltresi(IptalDahil: true))).IptalEdildi);
+        Assert.Throws<IslemHatasi>(() => tahsilatlar.IptalEt(t.Id, "tekrar", null));
+    }
+
+    [Fact]
+    public void Dekont_veri_klasorune_kopyalanir()
+    {
+        using var o = new TestOrtami();
+        var m = new MukellefServisi(o.Fabrika).Kaydet(new Mukellef { Unvan = "A/B Ltd. Şti." });
+        var kaynak = Path.Combine(o.Yol.Kok, "dekont.pdf");
+        File.WriteAllText(kaynak, "pdf");
+        var servis = new TahsilatServisi(o.Fabrika, o.Yol);
+
+        var t1 = servis.Ekle(new TahsilatGirdisi(m.Id, new DateOnly(2026, 11, 5), 100, OdemeYontemi.HavaleEft, null, null, null, null, kaynak), null);
+        var t2 = servis.Ekle(new TahsilatGirdisi(m.Id, new DateOnly(2026, 11, 5), 100, OdemeYontemi.HavaleEft, null, null, null, null, kaynak), null);
+
+        Assert.Equal(Path.Combine("2026", "11", "20261105_A_B Ltd. Şti..pdf"), t1.DekontDosyasi);
+        Assert.NotEqual(t1.DekontDosyasi, t2.DekontDosyasi);
+        Assert.True(File.Exists(servis.DekontTamYolu(t2.DekontDosyasi)));
+    }
+
+    [Fact]
+    public void Gecersiz_tahsilat_reddedilir()
+    {
+        using var o = new TestOrtami();
+        var m = new MukellefServisi(o.Fabrika).Kaydet(new Mukellef { Unvan = "X" });
+        var servis = new TahsilatServisi(o.Fabrika, o.Yol);
+        Assert.Throws<IslemHatasi>(() => servis.Ekle(new TahsilatGirdisi(m.Id, new DateOnly(2026, 11, 5), 0, OdemeYontemi.Nakit, null, null, null, null, null), null));
+        Assert.Throws<IslemHatasi>(() => servis.Ekle(new TahsilatGirdisi(m.Id, DateOnly.FromDateTime(DateTime.Today).AddDays(10), 10, OdemeYontemi.Nakit, null, null, null, null, null), null));
+    }
+}

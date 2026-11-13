@@ -67,6 +67,14 @@ public static class Secenekler
         new(OdemeTercihi.Iban, "IBAN"),
     ];
 
+    public static readonly List<Secenek<OdemeYontemi>> OdemeYontemleri =
+    [
+        new(OdemeYontemi.Nakit, "Nakit"),
+        new(OdemeYontemi.HavaleEft, "Havale / EFT"),
+        new(OdemeYontemi.KrediKarti, "Kredi kartı"),
+        new(OdemeYontemi.CekSenet, "Çek / Senet"),
+    ];
+
     public static readonly List<Secenek<KullaniciRolu>> Roller =
     [
         new(KullaniciRolu.Kullanici, "Kullanıcı"),
@@ -88,6 +96,13 @@ public sealed class EnumAciklamaDonusturucu : IValueConverter
         OdemeTercihi.Belirtilmedi => "",
         KullaniciRolu.Yonetici => "Yönetici",
         KullaniciRolu.Kullanici => "Kullanıcı",
+        OdemeYontemi.Nakit => "Nakit",
+        OdemeYontemi.HavaleEft => "Havale/EFT",
+        OdemeYontemi.KrediKarti => "Kredi kartı",
+        OdemeYontemi.CekSenet => "Çek/Senet",
+        TahakkukKaynagi.Otomatik => "Otomatik",
+        TahakkukKaynagi.Manuel => "Elle",
+        TahakkukKaynagi.Devir => "Devir",
         EkstreSatirTuru.Borc => "Borç",
         EkstreSatirTuru.Odeme => "Ödeme",
         _ => value?.ToString(),
@@ -161,4 +176,11 @@ public sealed class BoolTersDonusturucu : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is not true;
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => value is not true;
+}
+
+public static class PencereYardimcisi
+{
+    /// <summary>Açılacak iletişim penceresinin sahibi: o an etkin pencere (yoksa ana pencere).</summary>
+    public static Window? Sahip() =>
+        Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive) ?? Application.Current.MainWindow;
 }

@@ -23,7 +23,7 @@ public partial class AktarimPenceresi
     public static bool Ac()
     {
         var model = new AktarimModeli(App.Servisler.GetRequiredService<ExcelAktarimServisi>());
-        var pencere = new AktarimPenceresi(model) { Owner = Application.Current.MainWindow };
+        var pencere = new AktarimPenceresi(model) { Owner = PencereYardimcisi.Sahip() };
         return pencere.ShowDialog() == true;
     }
 }

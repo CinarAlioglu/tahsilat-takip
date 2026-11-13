@@ -1,0 +1,70 @@
+<Page x:Class="TahsilatTakip.App.Sayfalar.TahsilatlarSayfasi"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Tahsilatlar">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{StaticResource SayfaBasligi}" Text="Tahsilatlar" />
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,12" LastChildFill="False">
+            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,0,8,0" Text="Tarih:" />
+            <DatePicker DockPanel.Dock="Left" Width="130" SelectedDate="{Binding Baslangic}" />
+            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Margin="6,0" Text="–" />
+            <DatePicker DockPanel.Dock="Left" Width="130" SelectedDate="{Binding Bitis}" />
+            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Margin="16,0,8,0" Text="Tahsil eden:" />
+            <ComboBox DockPanel.Dock="Left" Width="140" ItemsSource="{Binding TahsilEdenler}" SelectedItem="{Binding TahsilEden}" />
+            <CheckBox DockPanel.Dock="Left" Margin="16,0,0,0" VerticalAlignment="Center" Content="İptalleri göster"
+                      IsChecked="{Binding IptalDahil}" />
+            <ui:Button DockPanel.Dock="Right" Appearance="Primary" Icon="{ui:SymbolIcon Add24}"
+                       Content="Tahsilat al" Command="{Binding YeniCommand}" />
+        </DockPanel>
+
+        <DataGrid Grid.Row="2" Style="{StaticResource Tablo}" ItemsSource="{Binding Satirlar}" SelectedItem="{Binding Secili}">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IptalEdildi}" Value="True">
+                            <Setter Property="Opacity" Value="0.45" />
+                            <Setter Property="ToolTip" Value="{Binding IptalNedeni}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="95" />
+                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="*" />
+                <DataGridTextColumn Header="Tutar" Binding="{Binding Tutar, StringFormat=N2}" Width="110"
+                                    ElementStyle="{StaticResource SagaYasli}" />
+                <DataGridTextColumn Header="Yöntem" Binding="{Binding OdemeYontemi, Converter={StaticResource EnumAciklama}}" Width="95" />
+                <DataGridTextColumn Header="Tahsil eden" Binding="{Binding TahsilEden}" Width="100" />
+                <DataGridTextColumn Header="Hesap" Binding="{Binding Hesap}" Width="110" />
+                <DataGridTextColumn Header="Ödeyen" Binding="{Binding OdeyenKisi}" Width="110" />
+                <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="*" />
+                <DataGridTemplateColumn Header="Dekont" Width="70">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:Button Appearance="Transparent" Padding="4,0" Icon="{ui:SymbolIcon Attach24}" ToolTip="Dekontu aç"
+                                       Visibility="{Binding DekontDosyasi, Converter={StaticResource DoluysaGorunur}}"
+                                       Command="{Binding DataContext.DekontAcCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                       CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Kaydeden" Binding="{Binding Kaydeden}" Width="110" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel Grid.Row="3" Margin="0,8,0,0">
+            <ui:Button DockPanel.Dock="Right" Icon="{ui:SymbolIcon Delete24}" Content="Seçili tahsilatı iptal et"
+                       Command="{Binding IptalCommand}" />
+            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       Text="{Binding Ozet}" />
+        </DockPanel>
+    </Grid>
+</Page>

@@ -27,9 +27,11 @@ public partial class MukellefKartiPenceresi
     {
         var model = new MukellefKartiModeli(
             App.Servisler.GetRequiredService<MukellefServisi>(),
+            App.Servisler.GetRequiredService<TahakkukServisi>(),
+            App.Servisler.GetRequiredService<TahsilatServisi>(),
             App.Servisler.GetRequiredService<Oturum>());
         model.Yukle(mukellefId);
-        var pencere = new MukellefKartiPenceresi(model) { Owner = Application.Current.MainWindow };
+        var pencere = new MukellefKartiPenceresi(model) { Owner = PencereYardimcisi.Sahip() };
         pencere.ShowDialog();
         return model.DegisiklikVar;
     }
@@ -38,7 +40,8 @@ public partial class MukellefKartiPenceresi
 public sealed record PlanSatiri(
     int Id, string Hizmet, UcretPeriyodu Periyot, decimal Tutar, string Baslangic, string Bitis, string? Aciklama);
 
-public partial class MukellefKartiModeli(MukellefServisi servis, Oturum oturum) : ObservableObject
+public partial class MukellefKartiModeli(
+    MukellefServisi servis, TahakkukServisi borclar, TahsilatServisi tahsilatlar, Oturum oturum) : ObservableObject
 {
     private Mukellef _mukellef = new();
 
@@ -59,6 +62,7 @@ public partial class MukellefKartiModeli(MukellefServisi servis, Oturum oturum) 
     [ObservableProperty] private string _baslikUnvan = "Yeni mükellef";
     [ObservableProperty] private decimal _bakiye;
     [ObservableProperty] private string _cariDurum = "";
+    [ObservableProperty] private EkstreSatiri? _seciliEkstre;
 
     // Bilgiler
     [ObservableProperty] private string _unvan = "";
@@ -243,6 +247,39 @@ public partial class MukellefKartiModeli(MukellefServisi servis, Oturum oturum) 
         servis.DevirGir(_mukellef.Id, DateOnly.FromDateTime(DevirTarihi.Value), tutar, DevirAciklama, oturum.Kullanici?.Id);
         DevirTutari = null;
         DevirAciklama = null;
+        DegisiklikVar = true;
+        CariYukle();
+    }
+
+    [RelayCommand]
+    private void TahsilatAl()
+    {
+        if (!TahsilatPenceresi.Ac(_mukellef.Id)) return;
+        DegisiklikVar = true;
+        CariYukle();
+        SeciliSekme = 2;
+    }
+
+    [RelayCommand]
+    private void ElleBorc()
+    {
+        if (!BorcPenceresi.Ac(_mukellef.Id)) return;
+        DegisiklikVar = true;
+        CariYukle();
+        SeciliSekme = 2;
+    }
+
+    [RelayCommand]
+    private void EkstreIptal()
+    {
+        if (SeciliEkstre is not { } s) throw new IslemHatasi("Önce ekstreden bir satır seçin.");
+        var tur = s.Tur == EkstreSatirTuru.Borc ? "borç" : "ödeme";
+        var neden = GirdiPenceresi.Sor($"Kaydı iptal et",
+            $"{s.Tarih:dd.MM.yyyy} tarihli {tur} kaydı ({s.Aciklama}, {Sayi.Yaz(s.Borc + s.Odeme)} ₺) iptal edilecek. İptal nedenini yazın:",
+            "İptal et");
+        if (neden is null) return;
+        if (s.Tur == EkstreSatirTuru.Borc) borclar.IptalEt(s.KayitId, neden, oturum.Kullanici?.Id);
+        else tahsilatlar.IptalEt(s.KayitId, neden, oturum.Kullanici?.Id);
         DegisiklikVar = true;
         CariYukle();
     }

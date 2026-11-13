@@ -26,6 +26,10 @@
                                        TargetPageType="{x:Type s:AnaPanelSayfasi}" />
                 <ui:NavigationViewItem Content="Mükellefler" Icon="{ui:SymbolIcon People24}"
                                        TargetPageType="{x:Type s:MukelleflerSayfasi}" />
+                <ui:NavigationViewItem Content="Tahsilatlar" Icon="{ui:SymbolIcon ReceiptMoney24}"
+                                       TargetPageType="{x:Type s:TahsilatlarSayfasi}" />
+                <ui:NavigationViewItem Content="Borçlar" Icon="{ui:SymbolIcon DocumentTable24}"
+                                       TargetPageType="{x:Type s:BorclarSayfasi}" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="Ayarlar" Icon="{ui:SymbolIcon Settings24}"

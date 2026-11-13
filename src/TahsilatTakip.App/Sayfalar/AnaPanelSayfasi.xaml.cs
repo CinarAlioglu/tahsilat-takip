@@ -65,6 +65,12 @@ public partial class AnaPanelModeli(
     }
 
     [RelayCommand]
+    private void TahsilatAl()
+    {
+        if (Pencereler.TahsilatPenceresi.Ac()) Yukle();
+    }
+
+    [RelayCommand]
     private async Task BorclariYaz()
     {
         if (_oneriler.Count == 0) return;

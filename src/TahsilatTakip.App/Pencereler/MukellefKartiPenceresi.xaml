@@ -16,6 +16,13 @@
 
         <!-- Üst bilgi -->
         <DockPanel Grid.Row="1" Margin="24,4,24,8">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0"
+                        Visibility="{Binding YeniKayit, Converter={StaticResource BoolGizli}}">
+                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ReceiptMoney24}" Content="Tahsilat al"
+                           Command="{Binding TahsilatAlCommand}" />
+                <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Add24}" Content="Elle borç"
+                           Command="{Binding ElleBorcCommand}" />
+            </StackPanel>
             <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right"
                         Visibility="{Binding YeniKayit, Converter={StaticResource BoolGizli}}">
                 <TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="Bakiye" />
@@ -171,7 +178,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <DataGrid Grid.Row="0" Style="{StaticResource Tablo}" ItemsSource="{Binding Ekstre}">
+                    <DataGrid Grid.Row="0" Style="{StaticResource Tablo}" ItemsSource="{Binding Ekstre}" SelectedItem="{Binding SeciliEkstre}">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="100" />
                             <DataGridTextColumn Header="Tür" Binding="{Binding Tur, Converter={StaticResource EnumAciklama}}" Width="70" />
@@ -193,6 +200,8 @@
                     </DataGrid>
                     <ui:Card Grid.Row="1" Margin="0,12,0,0">
                         <StackPanel>
+                            <ui:Button HorizontalAlignment="Right" Margin="0,-4,0,8" Icon="{ui:SymbolIcon Delete24}"
+                                       Content="Seçili satırı iptal et" Command="{Binding EkstreIptalCommand}" />
                             <TextBlock Style="{StaticResource AltBaslik}" Text="Devir (açılış bakiyesi)" />
                             <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                        Text="Uygulamaya geçmeden önceki toplam borcu tek kalemde girin. Ör. geçiş ayı Kasım ise 31 Ekim itibarıyla kalan borç (Ekim ücreti dahil)." />

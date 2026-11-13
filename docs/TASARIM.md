@@ -22,6 +22,6 @@ Tahsil eden (Ofis / Eleman / ...), hesap (paranın geldiği yer), ödeyen kişi,
 
 ## Aşamalar
 1. ✅ İskelet, veritabanı, giriş, mükellefler, ücret planları, devir, cari ekstre, otomatik borç yazma, Excel aktarımı, yedekleme
-2. Tahsilat girişi ve listesi, elle borç (ek hizmet), borç/ödeme iptali
+2. ✅ Tahsilat girişi ve listesi, elle borç (ek hizmet), borç/ödeme iptali
 3. Görüşmeler ve ödeme sözleri, ödeme grupları
 4. Gecikenler, raporlar (Excel/PDF), işlem günlüğü ekranı
