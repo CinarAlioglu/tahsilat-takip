@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Company>Tahsilat Takip</Company>
+    <Product>Tahsilat Takip</Product>
+    <Version>0.1.0</Version>
+    <!-- Linux/CI ortamında da derlenebilmesi için (uygulama yalnızca Windows'ta çalışır) -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+</Project>

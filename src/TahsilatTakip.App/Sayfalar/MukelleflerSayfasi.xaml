@@ -1,0 +1,54 @@
+<Page x:Class="TahsilatTakip.App.Sayfalar.MukelleflerSayfasi"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Mükellefler">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource SayfaBasligi}" Text="Mükellefler" />
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,12" LastChildFill="False">
+            <ui:TextBox DockPanel.Dock="Left" Width="320" PlaceholderText="Ünvan veya telefon ara..."
+                        Icon="{ui:SymbolIcon Search24}" ClearButtonEnabled="True"
+                        Text="{Binding Arama, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox DockPanel.Dock="Left" Width="200" Margin="8,0,0,0"
+                      ItemsSource="{Binding DurumFiltreleri}" SelectedItem="{Binding DurumFiltresi}" />
+            <CheckBox DockPanel.Dock="Left" Margin="16,0,0,0" VerticalAlignment="Center"
+                      Content="Sadece borçlular" IsChecked="{Binding SadeceBorclular}" />
+            <ui:Button DockPanel.Dock="Right" Appearance="Primary" Icon="{ui:SymbolIcon Add24}"
+                       Content="Yeni mükellef" Command="{Binding YeniCommand}" />
+        </DockPanel>
+
+        <DataGrid x:Name="Tablo" Grid.Row="2" Style="{StaticResource Tablo}"
+                  ItemsSource="{Binding Gorunen}" SelectedItem="{Binding Secili}"
+                  MouseDoubleClick="Tablo_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Ünvan" Binding="{Binding Unvan}" Width="*" />
+                <DataGridTextColumn Header="Ücret" Binding="{Binding UcretBilgisi}" Width="150" />
+                <DataGridTextColumn Header="Ödeme" Binding="{Binding OdemeTercihi, Converter={StaticResource EnumAciklama}}" Width="80" />
+                <DataGridTextColumn Header="Grup" Binding="{Binding OdemeGrubu}" Width="120" />
+                <DataGridTextColumn Header="Durum" Binding="{Binding Durum, Converter={StaticResource EnumAciklama}}" Width="80" />
+                <DataGridTextColumn Header="Gecikme" Binding="{Binding GecikmeGunu, StringFormat={}{0} gün}" Width="90"
+                                    ElementStyle="{StaticResource SagaYasli}" />
+                <DataGridTemplateColumn Header="Bakiye" Width="140" SortMemberPath="Bakiye">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource SagaYasli}" FontWeight="SemiBold"
+                                       Text="{Binding Bakiye, StringFormat=N2}"
+                                       Foreground="{Binding Bakiye, Converter={StaticResource BakiyeRengi}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="3" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                   Text="{Binding Ozet}" />
+    </Grid>
+</Page>
