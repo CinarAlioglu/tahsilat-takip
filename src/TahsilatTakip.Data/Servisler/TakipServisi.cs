@@ -35,7 +35,7 @@ public sealed class AylikDurumSatiri
     public int Id { get; init; }
     public string Unvan { get; init; } = "";
     public string UcretBilgisi { get; init; } = "";
-    /// <summary>Yıl başından önceki dönemlerden kalan (devir dahil).</summary>
+    /// <summary>Devirden ve seçilen yıldan önceki dönemlerden kalan ödenmemiş tutar.</summary>
     public decimal OncekiKalan { get; init; }
     public AyDurumu[] Aylar { get; } = new AyDurumu[12];
     public decimal[] AyKalanlari { get; } = new decimal[12];
@@ -155,7 +155,8 @@ public sealed class TakipServisi(VeritabaniFabrikasi fabrika, AyarServisi ayarla
                 Id = m.Id,
                 Unvan = m.Unvan,
                 UcretBilgisi = UcretBilgisi(v.Planlar[m.Id], bugun),
-                OncekiKalan = kapanislar.Where(k => k.Tahakkuk.DonemBaslangic < yilBasi).Sum(k => k.Kalan),
+                OncekiKalan = kapanislar.Where(k => k.Tahakkuk.Kaynak == TahakkukKaynagi.Devir || k.Tahakkuk.DonemBaslangic < yilBasi)
+                    .Sum(k => k.Kalan),
                 Bakiye = CariHesaplayici.Ozet(v.Borclar[m.Id], v.Odemeler[m.Id], bugun).Bakiye,
             };
             foreach (var k in kapanislar.Where(k => k.Tahakkuk.HizmetTuruId == HizmetTuru.AylikMuhasebeUcretiId

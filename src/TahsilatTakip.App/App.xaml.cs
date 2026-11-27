@@ -29,6 +29,11 @@ public partial class App : Application
 
         DispatcherUnhandledException += BeklenmeyenHata;
 
+        // Tarih kutuları kısa biçimde (13.11.2026); Fluent görünümü bozmamak için stil yerine olay ile.
+        EventManager.RegisterClassHandler(typeof(System.Windows.Controls.DatePicker), FrameworkElement.LoadedEvent,
+            new RoutedEventHandler((s, _) => ((System.Windows.Controls.DatePicker)s).SelectedDateFormat =
+                System.Windows.Controls.DatePickerFormat.Short));
+
         // Windows koyu modda olsa da uygulama her zaman açık temayla açılır (tüm pencerelerde tutarlı görünüm).
         Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Light, Wpf.Ui.Controls.WindowBackdropType.Mica, true);
 

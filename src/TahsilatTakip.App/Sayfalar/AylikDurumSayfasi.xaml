@@ -25,11 +25,11 @@
         <DataGrid Grid.Row="2" Style="{StaticResource Tablo}" ItemsSource="{Binding Satirlar}" MouseDoubleClick="Tablo_MouseDoubleClick"
                   FrozenColumnCount="1">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="280" />
-                <DataGridTextColumn Header="Ücret" Binding="{Binding UcretBilgisi}" Width="120" />
-                <DataGridTextColumn Header="Önceki kalan" Binding="{Binding OncekiKalan, StringFormat='{}{0:#,##0;;#}'}" Width="95"
+                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="250" />
+                <DataGridTextColumn Header="Ücret" Binding="{Binding UcretBilgisi}" Width="105" />
+                <DataGridTextColumn Header="Devir/önceki" Binding="{Binding OncekiKalan, StringFormat='{}{0:#,##0;;#}'}" Width="90"
                                     ElementStyle="{StaticResource SagaYasli}" />
-                <DataGridTemplateColumn Header="Oca" Width="52" SortMemberPath="A1">
+                <DataGridTemplateColumn Header="Oca" Width="46" SortMemberPath="A1">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A1, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -39,7 +39,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Şub" Width="52" SortMemberPath="A2">
+                <DataGridTemplateColumn Header="Şub" Width="46" SortMemberPath="A2">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A2, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -49,7 +49,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Mar" Width="52" SortMemberPath="A3">
+                <DataGridTemplateColumn Header="Mar" Width="46" SortMemberPath="A3">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A3, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -59,7 +59,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Nis" Width="52" SortMemberPath="A4">
+                <DataGridTemplateColumn Header="Nis" Width="46" SortMemberPath="A4">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A4, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -69,7 +69,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="May" Width="52" SortMemberPath="A5">
+                <DataGridTemplateColumn Header="May" Width="46" SortMemberPath="A5">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A5, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -79,7 +79,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Haz" Width="52" SortMemberPath="A6">
+                <DataGridTemplateColumn Header="Haz" Width="46" SortMemberPath="A6">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A6, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -89,7 +89,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Tem" Width="52" SortMemberPath="A7">
+                <DataGridTemplateColumn Header="Tem" Width="46" SortMemberPath="A7">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A7, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -99,7 +99,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Ağu" Width="52" SortMemberPath="A8">
+                <DataGridTemplateColumn Header="Ağu" Width="46" SortMemberPath="A8">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A8, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -109,7 +109,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Eyl" Width="52" SortMemberPath="A9">
+                <DataGridTemplateColumn Header="Eyl" Width="46" SortMemberPath="A9">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A9, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -119,7 +119,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Eki" Width="52" SortMemberPath="A10">
+                <DataGridTemplateColumn Header="Eki" Width="46" SortMemberPath="A10">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A10, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -129,7 +129,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Kas" Width="52" SortMemberPath="A11">
+                <DataGridTemplateColumn Header="Kas" Width="46" SortMemberPath="A11">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A11, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -139,7 +139,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Ara" Width="52" SortMemberPath="A12">
+                <DataGridTemplateColumn Header="Ara" Width="46" SortMemberPath="A12">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border Background="{Binding A12, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
@@ -149,7 +149,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Bakiye" Width="110" SortMemberPath="Bakiye">
+                <DataGridTemplateColumn Header="Bakiye" Width="*" MinWidth="100" SortMemberPath="Bakiye">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource SagaYasli}" FontWeight="SemiBold" Text="{Binding Bakiye, StringFormat=N2}"

@@ -27,7 +27,7 @@
                 <DockPanel>
                     <ui:Button DockPanel.Dock="Right" VerticalAlignment="Center" Icon="{ui:SymbolIcon ArrowDownload24}" Content="Excel oluştur"
                                Command="{Binding BakiyeListesiCommand}" />
-                    <StackPanel>
+                    <StackPanel Margin="0,0,16,0">
                         <TextBlock Style="{StaticResource AltBaslik}" Text="Bakiye listesi (Excel)" />
                         <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                    Text="Bugün itibarıyla tüm mükelleflerin bakiyesi, gecikme günü ve 0-30 / 31-60 / 61-90 / 90+ gün dağılımı." />
@@ -42,7 +42,7 @@
                         <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon ArrowDownload24}" Content="Excel oluştur"
                                    Command="{Binding AylikDurumCommand}" />
                     </StackPanel>
-                    <StackPanel>
+                    <StackPanel Margin="0,0,16,0">
                         <TextBlock Style="{StaticResource AltBaslik}" Text="Aylık ödeme durumu (Excel)" />
                         <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                    Text="Eski Excel listesindeki gibi: her mükellef için ödenen ve ödenmeyen aylar, renkli." />

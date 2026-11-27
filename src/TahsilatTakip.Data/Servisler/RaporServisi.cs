@@ -131,7 +131,7 @@ public sealed class RaporServisi(
         var liste = takip.AylikDurum(yil, bugun);
         using var wb = new XLWorkbook();
         var ws = wb.AddWorksheet($"{yil} ödeme durumu");
-        BaslikYaz(ws, ["Mükellef", "Ücret", $"{yil} öncesi kalan", .. Donem.AyAdlari, "Bakiye"]);
+        BaslikYaz(ws, ["Mükellef", "Ücret", "Devir / önceki kalan", .. Donem.AyAdlari, "Bakiye"]);
         var r = 2;
         foreach (var s in liste)
         {
@@ -196,7 +196,7 @@ public sealed class RaporServisi(
     {
         var m = mukellefler.Getir(mukellefId) ?? throw new IslemHatasi("Mükellef bulunamadı.");
         var (ekstre, ozet) = mukellefler.Cari(mukellefId, bugun, icKullanim: false);
-        var ofis = ayarlar.Oku(AyarServisi.OfisAdi) ?? "Cari Hesap Ekstresi";
+        var ofis = ayarlar.Oku(AyarServisi.OfisAdi) ?? "";
         var ofisTel = ayarlar.Oku(AyarServisi.OfisTelefonu);
         var iban = ayarlar.Oku(AyarServisi.MesajIban);
         var tr = Turkce.Kultur;

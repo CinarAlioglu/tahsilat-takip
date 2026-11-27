@@ -41,14 +41,14 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="95" />
-                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="2*" />
+                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="2*" MinWidth="200" />
                 <DataGridTextColumn Header="Tutar" Binding="{Binding Tutar, StringFormat=N2}" Width="110"
                                     ElementStyle="{StaticResource SagaYasli}" />
                 <DataGridTextColumn Header="Yöntem" Binding="{Binding OdemeYontemi, Converter={StaticResource EnumAciklama}}" Width="95" />
                 <DataGridTextColumn Header="Tahsil eden" Binding="{Binding TahsilEden}" Width="100" />
-                <DataGridTextColumn Header="Hesap" Binding="{Binding Hesap}" Width="110" />
-                <DataGridTextColumn Header="Ödeyen" Binding="{Binding OdeyenKisi}" Width="110" />
-                <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="*" />
+                <DataGridTextColumn Header="Hesap" Binding="{Binding Hesap}" Width="90" />
+                <DataGridTextColumn Header="Ödeyen" Binding="{Binding OdeyenKisi}" Width="90" />
+                <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="*" MinWidth="120" />
                 <DataGridTemplateColumn Header="Dekont" Width="70">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -59,7 +59,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Teslim" Binding="{Binding TeslimDurumu}" Width="140">
+                <DataGridTextColumn Header="Teslim" Binding="{Binding TeslimDurumu}" Width="130">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Style.Triggers>
@@ -71,7 +71,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Kaydeden" Binding="{Binding Kaydeden}" Width="110" />
+                <DataGridTextColumn Header="Kaydeden" Binding="{Binding Kaydeden}" Width="100" />
             </DataGrid.Columns>
         </DataGrid>
 
