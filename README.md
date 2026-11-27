@@ -14,6 +14,7 @@ SMMM ofisinin mükelleflerden aldığı muhasebe ücretlerini takip eden Windows
 | Arayüz | WPF + [WPF-UI](https://github.com/lepoco/wpfui) (Fluent), MVVM (CommunityToolkit.Mvvm) |
 | Veri | EF Core + SQLite |
 | Excel | ClosedXML |
+| PDF | QuestPDF (topluluk lisansı: yıllık cirosu 1 milyon USD altındaki işletmeler için ücretsiz) |
 
 ```
 src/TahsilatTakip.Core   İş kuralları (dönem, borç planlama, cari hesap, şifre) — arayüzden bağımsız
@@ -21,6 +22,9 @@ src/TahsilatTakip.Data   Veritabanı, servisler, Excel aktarımı, yedekleme
 src/TahsilatTakip.App    WPF arayüzü
 tests/TahsilatTakip.Tests
 ```
+
+Menüler: Ana panel · Mükellefler · Takip (gecikenler, ödeme sözleri) · Aylık durum · Tahsilatlar · Borçlar ·
+Ödeme grupları · Raporlar · Ayarlar.
 
 İş kuralları ve veri katmanı arayüzden ayrıdır; ileride sunucuya geçildiğinde yalnızca veri katmanı değişir.
 
@@ -36,7 +40,7 @@ Ayarlar'dan ek bir yedek klasörü (Google Drive, USB vb.) tanımlanabilir.
 
 ## Çalıştırma
 
-**Hazır paket:** GitHub'da *Actions → Derle ve test et → son çalışma → Artifacts* bölümünden `TahsilatTakip-win-x64` indirilir. İçindeki `TahsilatTakip.exe` .NET kurulumu gerektirmeden çalışır.
+**Hazır paket:** GitHub'da *Actions → Derle ve test et → son çalışma → Artifacts* bölümünden `TahsilatTakip-win-x64` indirilir. İçindeki `TahsilatTakip.exe` .NET kurulumu gerektirmeden çalışır; yanındaki `questpdf_fonts_lato.br` dosyası (PDF yazı tipi) aynı klasörde durmalıdır.
 
 **Kaynak koddan:** [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) kurulu olmalıdır.
 

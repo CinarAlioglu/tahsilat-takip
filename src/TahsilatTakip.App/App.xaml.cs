@@ -80,12 +80,25 @@ public partial class App : Application
         s.AddSingleton<ExcelAktarimServisi>();
         s.AddSingleton<YedekServisi>();
         s.AddSingleton<TahsilatServisi>();
+        s.AddSingleton<AyarServisi>();
+        s.AddSingleton<GorusmeServisi>();
+        s.AddSingleton<TakipServisi>();
+        s.AddSingleton<GrupServisi>();
+        s.AddSingleton<RaporServisi>();
 
         s.AddTransient<GirisPenceresi>();
         s.AddTransient<AnaPencere>();
         s.AddTransient<AnaPanelSayfasi>();
         s.AddTransient<MukelleflerSayfasi>();
         s.AddTransient<AyarlarSayfasi>();
+        s.AddTransient<TakipSayfasi>();
+        s.AddTransient<TakipModeli>();
+        s.AddTransient<AylikDurumSayfasi>();
+        s.AddTransient<AylikDurumModeli>();
+        s.AddTransient<GruplarSayfasi>();
+        s.AddTransient<GruplarModeli>();
+        s.AddTransient<RaporlarSayfasi>();
+        s.AddTransient<RaporlarModeli>();
         s.AddTransient<TahsilatlarSayfasi>();
         s.AddTransient<BorclarSayfasi>();
         s.AddTransient<TahsilatlarModeli>();

@@ -35,13 +35,14 @@ public sealed record CariOzet(
 /// </summary>
 public static class CariHesaplayici
 {
-    public static List<EkstreSatiri> Ekstre(IEnumerable<Tahakkuk> tahakkuklar, IEnumerable<Tahsilat> tahsilatlar)
+    /// <param name="icKullanim">false ise (mükellefe gönderilecek ekstre) tahsil eden kişi gibi ofis içi bilgiler yazılmaz.</param>
+    public static List<EkstreSatiri> Ekstre(IEnumerable<Tahakkuk> tahakkuklar, IEnumerable<Tahsilat> tahsilatlar, bool icKullanim = true)
     {
         var satirlar = tahakkuklar.Where(t => !t.IptalEdildi)
             .Select(t => (t.Tarih, Sira: 0, t.Id, Tur: EkstreSatirTuru.Borc, t.Aciklama, Borc: t.Tutar, Odeme: 0m))
             .Concat(tahsilatlar.Where(t => !t.IptalEdildi)
                 .Select(t => (t.Tarih, Sira: 1, t.Id, Tur: EkstreSatirTuru.Odeme,
-                    Aciklama: OdemeAciklamasi(t), Borc: 0m, Odeme: t.Tutar)))
+                    Aciklama: OdemeAciklamasi(t, icKullanim), Borc: 0m, Odeme: t.Tutar)))
             .OrderBy(s => s.Tarih).ThenBy(s => s.Sira).ThenBy(s => s.Id);
 
         var bakiye = 0m;
@@ -95,7 +96,7 @@ public static class CariHesaplayici
         return new DateOnly(borcTarihi.Year, borcTarihi.Month, Math.Min(gun, sonGun));
     }
 
-    private static string OdemeAciklamasi(Tahsilat t)
+    private static string OdemeAciklamasi(Tahsilat t, bool icKullanim)
     {
         var yontem = t.OdemeYontemi switch
         {
@@ -106,8 +107,8 @@ public static class CariHesaplayici
             _ => "Ödeme",
         };
         var parcalar = new List<string> { $"Ödeme ({yontem})" };
-        if (!string.IsNullOrWhiteSpace(t.TahsilEden)) parcalar.Add($"tahsil eden: {t.TahsilEden}");
-        if (!string.IsNullOrWhiteSpace(t.Aciklama)) parcalar.Add(t.Aciklama!);
+        if (icKullanim && !string.IsNullOrWhiteSpace(t.TahsilEden)) parcalar.Add($"tahsil eden: {t.TahsilEden}");
+        if (icKullanim && !string.IsNullOrWhiteSpace(t.Aciklama)) parcalar.Add(t.Aciklama!);
         return string.Join(" - ", parcalar);
     }
 }

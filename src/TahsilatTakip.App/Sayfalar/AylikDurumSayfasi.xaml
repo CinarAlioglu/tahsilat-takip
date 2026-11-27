@@ -1,0 +1,166 @@
+<Page x:Class="TahsilatTakip.App.Sayfalar.AylikDurumSayfasi"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Aylık durum">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{StaticResource SayfaBasligi}" Text="Aylık ödeme durumu" />
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,12" LastChildFill="False">
+            <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,0,8,0" Text="Yıl:" />
+            <ComboBox DockPanel.Dock="Left" Width="100" ItemsSource="{Binding Yillar}" SelectedItem="{Binding Yil}" />
+            <ui:TextBox DockPanel.Dock="Left" Width="260" Margin="16,0,0,0" PlaceholderText="Mükellef ara..."
+                        Icon="{ui:SymbolIcon Search24}" ClearButtonEnabled="True" Text="{Binding Arama, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox DockPanel.Dock="Left" Margin="16,0,0,0" VerticalAlignment="Center" Content="Sadece ödenmemiş ayı olanlar"
+                      IsChecked="{Binding SadeceAcik}" />
+            <ui:Button DockPanel.Dock="Right" Icon="{ui:SymbolIcon ArrowDownload24}" Content="Excel'e aktar" Command="{Binding ExcelCommand}" />
+        </DockPanel>
+
+        <DataGrid Grid.Row="2" Style="{StaticResource Tablo}" ItemsSource="{Binding Satirlar}" MouseDoubleClick="Tablo_MouseDoubleClick"
+                  FrozenColumnCount="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mükellef" Binding="{Binding Unvan}" Width="280" />
+                <DataGridTextColumn Header="Ücret" Binding="{Binding UcretBilgisi}" Width="120" />
+                <DataGridTextColumn Header="Önceki kalan" Binding="{Binding OncekiKalan, StringFormat='{}{0:#,##0;;#}'}" Width="95"
+                                    ElementStyle="{StaticResource SagaYasli}" />
+                <DataGridTemplateColumn Header="Oca" Width="52" SortMemberPath="A1">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A1, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A1, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Şub" Width="52" SortMemberPath="A2">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A2, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A2, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Mar" Width="52" SortMemberPath="A3">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A3, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A3, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Nis" Width="52" SortMemberPath="A4">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A4, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A4, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="May" Width="52" SortMemberPath="A5">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A5, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A5, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Haz" Width="52" SortMemberPath="A6">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A6, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A6, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Tem" Width="52" SortMemberPath="A7">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A7, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A7, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Ağu" Width="52" SortMemberPath="A8">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A8, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A8, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Eyl" Width="52" SortMemberPath="A9">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A9, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A9, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Eki" Width="52" SortMemberPath="A10">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A10, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A10, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Kas" Width="52" SortMemberPath="A11">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A11, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A11, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Ara" Width="52" SortMemberPath="A12">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding A12, Converter={StaticResource AyRengi}}" CornerRadius="3" Margin="1">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding A12, Converter={StaticResource AyMetni}}" />
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Bakiye" Width="110" SortMemberPath="Bakiye">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource SagaYasli}" FontWeight="SemiBold" Text="{Binding Bakiye, StringFormat=N2}"
+                                       Foreground="{Binding Bakiye, Converter={StaticResource BakiyeRengi}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="3" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"
+                   Text="✓ ödendi · ½ kısmen ödendi · ✗ ödenmedi · boş: o ay için borç yazılmamış. Ödemeler en eski borçtan başlayarak kapatılır. Satıra çift tıklayınca mükellef kartı açılır." />
+    </Grid>
+</Page>

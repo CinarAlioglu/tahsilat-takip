@@ -399,6 +399,15 @@ namespace TahsilatTakip.Data.Migrations
                     b.Property<DateOnly>("Tarih")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TeslimAlan")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("TeslimEdildi")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly?>("TeslimTarihi")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("Tutar")
                         .HasColumnType("TEXT");
 

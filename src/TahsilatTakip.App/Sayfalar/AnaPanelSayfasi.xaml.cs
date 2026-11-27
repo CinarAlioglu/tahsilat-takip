@@ -17,12 +17,16 @@ public partial class AnaPanelSayfasi
         InitializeComponent();
         Loaded += (_, _) => model.Yukle();
     }
+
+    private void TakipeGit_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        (System.Windows.Application.Current.MainWindow as Pencereler.AnaPencere)?.Git(typeof(TakipSayfasi));
 }
 
 public sealed record BekleyenBorcSatiri(string Unvan, string Aciklama, DateOnly Tarih, decimal Tutar);
 
 public partial class AnaPanelModeli(
-    MukellefServisi mukellefler, TahakkukServisi tahakkuklar, YedekServisi yedek, Oturum oturum) : ObservableObject
+    MukellefServisi mukellefler, TahakkukServisi tahakkuklar, YedekServisi yedek, Oturum oturum,
+    GorusmeServisi gorusmeler, TahsilatServisi tahsilatlar) : ObservableObject
 {
     private List<TahakkukOnerisi> _oneriler = [];
 
@@ -36,6 +40,11 @@ public partial class AnaPanelModeli(
 
     public ObservableCollection<BekleyenBorcSatiri> BekleyenBorclar { get; } = [];
     public ObservableCollection<MukellefOzeti> EnYuksekBakiyeler { get; } = [];
+    public ObservableCollection<GorusmeSatiri> YakinSozler { get; } = [];
+
+    [ObservableProperty] private string _sozOzeti = "";
+    [ObservableProperty] private decimal _teslimTutari;
+    [ObservableProperty] private string _teslimOzeti = "";
 
     public void Yukle()
     {
@@ -59,6 +68,23 @@ public partial class AnaPanelModeli(
         BekleyenOzeti = BekleyenVar
             ? $"{_oneriler.Select(o => o.MukellefId).Distinct().Count()} mükellef için {_oneriler.Count} borç, toplam {Sayi.Yaz(_oneriler.Sum(o => o.Tutar))} ₺. Kontrol edip onaylayın."
             : "Tüm dönemlerin borçları yazılmış. Bir sonraki ay başında yeni dönemin borçları burada görünecek.";
+
+        // Ödeme sözleri: tutulmayanlar ve 3 gün içinde günü gelenler.
+        gorusmeler.SozleriGuncelle(bugun);
+        var sozler = gorusmeler.TakiptekiSozler();
+        var tutulmayan = sozler.Count(s => s.SozDurumu == SozDurumu.Tutulmadi);
+        var yakin = sozler.Where(s => s.SozDurumu == SozDurumu.Tutulmadi || s.SozTarihi <= bugun.AddDays(3)).ToList();
+        YakinSozler.Clear();
+        foreach (var s in yakin.Take(8)) YakinSozler.Add(s);
+        SozOzeti = sozler.Count == 0
+            ? "Takipte ödeme sözü yok. Mükellefle görüştüğünüzde \"Görüşme ekle\" ile sözü kaydedin."
+            : $"{sozler.Count} söz takipte · {tutulmayan} tanesi tutulmadı · {yakin.Count(s => s.SozDurumu == SozDurumu.Bekliyor)} tanesinin günü yaklaştı";
+
+        var teslim = tahsilatlar.Listele(new TahsilatFiltresi(SadeceTeslimBekleyen: true));
+        TeslimTutari = teslim.Sum(t => t.Tutar);
+        TeslimOzeti = teslim.Count == 0
+            ? "Eleman veya ortak tarafından tahsil edilip ofise teslim edilmemiş para yok."
+            : string.Join(" · ", teslim.GroupBy(t => t.TahsilEden).Select(g => $"{g.Key}: {Sayi.Yaz(g.Sum(t => t.Tutar))} ₺ ({g.Count()} adet)"));
 
         var son = yedek.SonYedekTarihi();
         YedekBilgisi = son is null ? "Henüz yedek alınmadı." : $"Son yedek: {son:dd.MM.yyyy HH:mm}";

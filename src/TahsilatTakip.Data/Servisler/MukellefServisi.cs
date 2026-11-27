@@ -174,13 +174,13 @@ public sealed class MukellefServisi(VeritabaniFabrikasi fabrika)
 
     // ---- Cari ---------------------------------------------------------------------------
 
-    public (List<EkstreSatiri> Ekstre, CariOzet Ozet) Cari(int mukellefId, DateOnly bugun)
+    public (List<EkstreSatiri> Ekstre, CariOzet Ozet) Cari(int mukellefId, DateOnly bugun, bool icKullanim = true)
     {
         using var db = fabrika.Olustur();
         var m = db.Mukellefler.AsNoTracking().First(x => x.Id == mukellefId);
         var borclar = db.Tahakkuklar.AsNoTracking().Where(t => t.MukellefId == mukellefId).ToList();
         var odemeler = db.Tahsilatlar.AsNoTracking().Where(t => t.MukellefId == mukellefId).ToList();
-        return (CariHesaplayici.Ekstre(borclar, odemeler), CariHesaplayici.Ozet(borclar, odemeler, bugun, m.OdemeGunu));
+        return (CariHesaplayici.Ekstre(borclar, odemeler, icKullanim), CariHesaplayici.Ozet(borclar, odemeler, bugun, m.OdemeGunu));
     }
 
     /// <summary>Toplu devir girişi için aktif mükellefler, notları ve şimdiye kadar girilmiş devir toplamı.</summary>

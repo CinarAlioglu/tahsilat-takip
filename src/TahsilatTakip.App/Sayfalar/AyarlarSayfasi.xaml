@@ -24,6 +24,30 @@
                 </StackPanel>
             </ui:CardAction>
 
+            <!-- Ofis bilgileri -->
+            <ui:Card Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource AltBaslik}" Text="Ofis bilgileri" />
+                    <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Hatırlatma mesajlarının altında ve PDF ekstrelerin başlığında kullanılır." />
+                    <WrapPanel Margin="0,4,0,0">
+                        <StackPanel Width="280" Margin="0,0,8,0">
+                            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ofis adı" />
+                            <ui:TextBox Text="{Binding OfisAdi}" PlaceholderText="Ör. SMMM ... Mali Müşavirlik" />
+                        </StackPanel>
+                        <StackPanel Width="170" Margin="0,0,8,0">
+                            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Telefon" />
+                            <ui:TextBox Text="{Binding OfisTelefonu}" />
+                        </StackPanel>
+                        <StackPanel Width="300" Margin="0,0,8,0">
+                            <TextBlock Style="{StaticResource AlanEtiketi}" Text="Ödeme için IBAN (isteğe bağlı)" />
+                            <ui:TextBox Text="{Binding MesajIban}" PlaceholderText="TR.. (mesaj ve ekstrede yazılır)" />
+                        </StackPanel>
+                        <ui:Button VerticalAlignment="Bottom" Icon="{ui:SymbolIcon Save24}" Content="Kaydet" Command="{Binding OfisKaydetCommand}" />
+                    </WrapPanel>
+                </StackPanel>
+            </ui:Card>
+
             <!-- Kullanıcılar -->
             <ui:Card Margin="0,12,0,0">
                 <StackPanel>

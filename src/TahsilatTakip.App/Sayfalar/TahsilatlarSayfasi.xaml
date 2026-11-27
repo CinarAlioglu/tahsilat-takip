@@ -21,11 +21,14 @@
             <ComboBox DockPanel.Dock="Left" Width="140" ItemsSource="{Binding TahsilEdenler}" SelectedItem="{Binding TahsilEden}" />
             <CheckBox DockPanel.Dock="Left" Margin="16,0,0,0" VerticalAlignment="Center" Content="İptalleri göster"
                       IsChecked="{Binding IptalDahil}" />
+            <CheckBox DockPanel.Dock="Left" Margin="16,0,0,0" VerticalAlignment="Center" Content="{Binding TeslimBasligi}"
+                      IsChecked="{Binding SadeceTeslimBekleyen}" />
             <ui:Button DockPanel.Dock="Right" Appearance="Primary" Icon="{ui:SymbolIcon Add24}"
                        Content="Tahsilat al" Command="{Binding YeniCommand}" />
         </DockPanel>
 
-        <DataGrid Grid.Row="2" Style="{StaticResource Tablo}" ItemsSource="{Binding Satirlar}" SelectedItem="{Binding Secili}">
+        <DataGrid x:Name="Tablo" Grid.Row="2" Style="{StaticResource Tablo}" SelectionMode="Extended"
+                  ItemsSource="{Binding Satirlar}" SelectedItem="{Binding Secili}" SelectionChanged="Tablo_SelectionChanged">
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
                     <Style.Triggers>
@@ -56,6 +59,18 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Teslim" Binding="{Binding TeslimDurumu}" Width="140">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding TeslimEdildi}" Value="False">
+                                    <Setter Property="Foreground" Value="#9D5D00" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Kaydeden" Binding="{Binding Kaydeden}" Width="110" />
             </DataGrid.Columns>
         </DataGrid>
@@ -63,6 +78,8 @@
         <DockPanel Grid.Row="3" Margin="0,8,0,0">
             <ui:Button DockPanel.Dock="Right" Icon="{ui:SymbolIcon Delete24}" Content="Seçili tahsilatı iptal et"
                        Command="{Binding IptalCommand}" />
+            <ui:Button DockPanel.Dock="Right" Margin="0,0,8,0" Icon="{ui:SymbolIcon MoneyHand24}" Content="Seçilenler ofise teslim alındı"
+                       Command="{Binding TeslimAlCommand}" />
             <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                        Text="{Binding Ozet}" />
         </DockPanel>

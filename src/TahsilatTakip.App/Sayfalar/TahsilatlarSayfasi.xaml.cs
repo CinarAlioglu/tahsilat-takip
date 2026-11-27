@@ -17,7 +17,13 @@ public partial class TahsilatlarSayfasi
         DataContext = model;
         InitializeComponent();
         Loaded += (_, _) => model.Yukle();
+        _model = model;
     }
+
+    private readonly TahsilatlarModeli _model;
+
+    private void Tablo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) =>
+        _model.CokluSecim = Tablo.SelectedItems.OfType<TahsilatSatiri>().ToList();
 }
 
 public partial class TahsilatlarModeli(TahsilatServisi servis, Oturum oturum) : ObservableObject
@@ -34,6 +40,16 @@ public partial class TahsilatlarModeli(TahsilatServisi servis, Oturum oturum) : 
     [ObservableProperty] private bool _iptalDahil;
     [ObservableProperty] private TahsilatSatiri? _secili;
     [ObservableProperty] private string _ozet = "";
+    [ObservableProperty] private bool _sadeceTeslimBekleyen;
+    [ObservableProperty] private string _teslimBasligi = "Sadece teslim bekleyenler";
+
+    public List<TahsilatSatiri> CokluSecim { get; set; } = [];
+
+    partial void OnSadeceTeslimBekleyenChanged(bool value)
+    {
+        if (value) { _yukleniyor = true; Baslangic = null; _yukleniyor = false; }
+        Listele();
+    }
 
     partial void OnBaslangicChanged(DateTime? value) => Listele();
     partial void OnBitisChanged(DateTime? value) => Listele();
@@ -59,7 +75,12 @@ public partial class TahsilatlarModeli(TahsilatServisi servis, Oturum oturum) : 
             Baslangic is { } b ? DateOnly.FromDateTime(b) : null,
             Bitis is { } s ? DateOnly.FromDateTime(s) : null,
             TahsilEden: TahsilEden == Tumu ? null : TahsilEden,
-            IptalDahil: IptalDahil));
+            IptalDahil: IptalDahil,
+            SadeceTeslimBekleyen: SadeceTeslimBekleyen));
+        var bekleyenler = servis.Listele(new TahsilatFiltresi(SadeceTeslimBekleyen: true));
+        TeslimBasligi = bekleyenler.Count > 0
+            ? $"Sadece teslim bekleyenler ({bekleyenler.Count} · {Sayi.Yaz(bekleyenler.Sum(t => t.Tutar))} ₺)"
+            : "Sadece teslim bekleyenler";
         Satirlar.Clear();
         foreach (var t in liste) Satirlar.Add(t);
 
@@ -87,6 +108,20 @@ public partial class TahsilatlarModeli(TahsilatServisi servis, Oturum oturum) : 
             "İptal et");
         if (neden is null) return;
         servis.IptalEt(Secili.Id, neden, oturum.Kullanici?.Id);
+        Listele();
+    }
+
+    [RelayCommand]
+    private void TeslimAl()
+    {
+        var secilenler = CokluSecim.Where(t => !t.TeslimEdildi && !t.IptalEdildi).ToList();
+        if (secilenler.Count == 0)
+            throw new IslemHatasi("Teslim bekleyen tahsilatları seçin (Ctrl veya Shift ile birden çok satır seçebilirsiniz).");
+        var alan = GirdiPenceresi.Sor("Ofise teslim",
+            $"{secilenler.Count} tahsilat (toplam {Sayi.Yaz(secilenler.Sum(t => t.Tutar))} ₺) ofise teslim alındı olarak işaretlenecek. Teslim alan kişi:",
+            "Teslim alındı", oturum.Kullanici?.AdSoyad);
+        if (alan is null) return;
+        servis.TeslimAl(secilenler.Select(t => t.Id), DateOnly.FromDateTime(DateTime.Today), alan);
         Listele();
     }
 

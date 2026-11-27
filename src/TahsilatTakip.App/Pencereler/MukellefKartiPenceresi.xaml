@@ -20,6 +20,8 @@
                         Visibility="{Binding YeniKayit, Converter={StaticResource BoolGizli}}">
                 <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ReceiptMoney24}" Content="Tahsilat al"
                            Command="{Binding TahsilatAlCommand}" />
+                <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Call24}" Content="Görüşme"
+                           Command="{Binding GorusmeEkleCommand}" />
                 <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Add24}" Content="Elle borç"
                            Command="{Binding ElleBorcCommand}" />
             </StackPanel>
@@ -171,6 +173,35 @@
                 </Grid>
             </TabItem>
 
+            <!-- ================= Görüşmeler ================= -->
+            <TabItem Header="Görüşmeler" IsEnabled="{Binding YeniKayit, Converter={StaticResource BoolTers}}">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" Style="{StaticResource Tablo}" ItemsSource="{Binding Gorusmeler}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy HH:mm}" Width="120" />
+                            <DataGridTextColumn Header="Kanal" Binding="{Binding Kanal, Converter={StaticResource EnumAciklama}}" Width="80" />
+                            <DataGridTextColumn Header="Not" Binding="{Binding Not}" Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextWrapping" Value="Wrap" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Söz" Binding="{Binding SozMetni}" Width="150" />
+                            <DataGridTextColumn Header="Durum" Binding="{Binding SozDurumu, Converter={StaticResource EnumAciklama}}" Width="85" />
+                            <DataGridTextColumn Header="Kaydeden" Binding="{Binding Kaydeden}" Width="110" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <ui:Button Icon="{ui:SymbolIcon Call24}" Content="Görüşme ekle" Command="{Binding GorusmeEkleCommand}" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
             <!-- ================= Cari ekstre ================= -->
             <TabItem Header="Cari ekstre" IsEnabled="{Binding YeniKayit, Converter={StaticResource BoolTers}}">
                 <Grid Margin="8">
@@ -200,8 +231,11 @@
                     </DataGrid>
                     <ui:Card Grid.Row="1" Margin="0,12,0,0">
                         <StackPanel>
-                            <ui:Button HorizontalAlignment="Right" Margin="0,-4,0,8" Icon="{ui:SymbolIcon Delete24}"
-                                       Content="Seçili satırı iptal et" Command="{Binding EkstreIptalCommand}" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-4,0,8">
+                                <ui:Button Icon="{ui:SymbolIcon Copy24}" Content="Hatırlatma mesajı" Command="{Binding MesajKopyalaCommand}" />
+                                <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon DocumentPdf24}" Content="PDF ekstre" Command="{Binding PdfCommand}" />
+                                <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Delete24}" Content="Seçili satırı iptal et" Command="{Binding EkstreIptalCommand}" />
+                            </StackPanel>
                             <TextBlock Style="{StaticResource AltBaslik}" Text="Devir (açılış bakiyesi)" />
                             <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                        Text="Uygulamaya geçmeden önceki toplam borcu tek kalemde girin. Ör. geçiş ayı Kasım ise 31 Ekim itibarıyla kalan borç (Ekim ücreti dahil)." />

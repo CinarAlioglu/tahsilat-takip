@@ -1,0 +1,18 @@
+<UserControl x:Class="TahsilatTakip.App.Kontroller.MukellefSecici"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <Grid>
+        <ui:TextBox x:Name="Kutu" PlaceholderText="Mükellef adının herhangi bir kısmını yazın..."
+                    Icon="{ui:SymbolIcon Search24}"
+                    TextChanged="Kutu_TextChanged" PreviewKeyDown="Kutu_PreviewKeyDown" LostKeyboardFocus="Kutu_LostKeyboardFocus" />
+        <Popup x:Name="Acilir" PlacementTarget="{Binding ElementName=Kutu}" Placement="Bottom" StaysOpen="False"
+               AllowsTransparency="True" Width="{Binding ActualWidth, ElementName=Kutu}">
+            <Border Background="{DynamicResource ApplicationBackgroundBrush}" BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="6" Padding="2" Margin="0,2,0,0">
+                <ListBox x:Name="Liste" MaxHeight="300" DisplayMemberPath="Unvan"
+                         PreviewMouseLeftButtonUp="Liste_PreviewMouseLeftButtonUp" PreviewKeyDown="Liste_PreviewKeyDown" />
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

@@ -16,9 +16,11 @@ public partial class GirdiPenceresi
     }
 
     /// <summary>Kullanıcı vazgeçerse veya boş bırakırsa null döner.</summary>
-    public static string? Sor(string baslik, string aciklama, string dugme = "Tamam")
+    public static string? Sor(string baslik, string aciklama, string dugme = "Tamam", string? varsayilan = null)
     {
         var p = new GirdiPenceresi(baslik, aciklama, dugme) { Owner = Yardimcilar.PencereYardimcisi.Sahip() };
+        p.Girdi.Text = varsayilan ?? "";
+        p.Girdi.SelectAll();
         return p.ShowDialog() == true && !string.IsNullOrWhiteSpace(p.Girdi.Text) ? p.Girdi.Text.Trim() : null;
     }
 

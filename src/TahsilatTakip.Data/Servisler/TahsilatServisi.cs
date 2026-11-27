@@ -28,14 +28,24 @@ public sealed record TahsilatSatiri(
     string? DekontDosyasi,
     bool IptalEdildi,
     string? IptalNedeni,
-    string? Kaydeden);
+    string? Kaydeden,
+    bool TeslimEdildi,
+    DateOnly? TeslimTarihi,
+    string? TeslimAlan,
+    Guid? GrupIslemNo)
+{
+    public string TeslimDurumu => TeslimEdildi
+        ? (TeslimTarihi is { } t ? $"Teslim alındı {t:dd.MM.yyyy}" : "")
+        : "Teslim bekliyor";
+}
 
 public sealed record TahsilatFiltresi(
     DateOnly? Baslangic = null,
     DateOnly? Bitis = null,
     int? MukellefId = null,
     string? TahsilEden = null,
-    bool IptalDahil = false);
+    bool IptalDahil = false,
+    bool SadeceTeslimBekleyen = false);
 
 /// <summary>Ödeme kayıtları. Kayıtlar silinmez, gerekçesiyle iptal edilir.</summary>
 public sealed class TahsilatServisi(VeritabaniFabrikasi fabrika, VeriYolu yol)
@@ -64,14 +74,35 @@ public sealed class TahsilatServisi(VeritabaniFabrikasi fabrika, VeriYolu yol)
         };
         if (!string.IsNullOrWhiteSpace(g.DekontKaynakDosyasi))
             t.DekontDosyasi = DekontKopyala(g.DekontKaynakDosyasi, mukellef.Unvan, g.Tarih);
+        t.TeslimEdildi = !TeslimGerekir(t.TahsilEden);
 
         db.Tahsilatlar.Add(t);
         db.SaveChanges();
         return t;
     }
 
+    /// <summary>Ofis dışında biri (eleman, ortak...) tahsil ettiyse paranın ofise teslimi takip edilir.</summary>
+    public static bool TeslimGerekir(string? tahsilEden) =>
+        !string.IsNullOrWhiteSpace(tahsilEden) && !Turkce.Karsilastirici.Equals(tahsilEden.Trim(), "Ofis");
+
+    /// <summary>Seçilen tahsilatları "ofise teslim alındı" olarak işaretler.</summary>
+    public int TeslimAl(IEnumerable<int> tahsilatIdleri, DateOnly tarih, string? teslimAlan)
+    {
+        var idler = tahsilatIdleri.ToHashSet();
+        using var db = fabrika.Olustur();
+        var kayitlar = db.Tahsilatlar.Where(t => idler.Contains(t.Id) && !t.IptalEdildi && !t.TeslimEdildi).ToList();
+        foreach (var t in kayitlar)
+        {
+            t.TeslimEdildi = true;
+            t.TeslimTarihi = tarih;
+            t.TeslimAlan = string.IsNullOrWhiteSpace(teslimAlan) ? null : teslimAlan.Trim();
+        }
+        db.SaveChanges();
+        return kayitlar.Count;
+    }
+
     /// <summary>Dekontu veri klasörüne (Dekontlar\yyyy\MM) kopyalar, göreli yolu döner.</summary>
-    private string DekontKopyala(string kaynak, string unvan, DateOnly tarih)
+    internal string DekontKopyala(string kaynak, string unvan, DateOnly tarih)
     {
         if (!File.Exists(kaynak)) throw new IslemHatasi("Dekont dosyası bulunamadı.");
         var gecersiz = Path.GetInvalidFileNameChars();
@@ -100,6 +131,7 @@ public sealed class TahsilatServisi(VeritabaniFabrikasi fabrika, VeriYolu yol)
         if (f.Bitis is { } s) q = q.Where(t => t.Tarih <= s);
         if (f.MukellefId is { } m) q = q.Where(t => t.MukellefId == m);
         if (!f.IptalDahil) q = q.Where(t => !t.IptalEdildi);
+        if (f.SadeceTeslimBekleyen) q = q.Where(t => !t.TeslimEdildi && !t.IptalEdildi);
         var liste = q.ToList();
         if (!string.IsNullOrWhiteSpace(f.TahsilEden))
             liste = liste.Where(t => Turkce.Karsilastirici.Equals(t.TahsilEden ?? "", f.TahsilEden.Trim())).ToList();
@@ -109,7 +141,8 @@ public sealed class TahsilatServisi(VeritabaniFabrikasi fabrika, VeriYolu yol)
             .OrderByDescending(t => t.Tarih).ThenByDescending(t => t.Id)
             .Select(t => new TahsilatSatiri(t.Id, t.Tarih, t.MukellefId, t.Mukellef!.Unvan, t.Tutar, t.OdemeYontemi,
                 t.TahsilEden, t.Hesap, t.OdeyenKisi, t.Aciklama, t.DekontDosyasi, t.IptalEdildi, t.IptalNedeni,
-                t.KaydedenKullaniciId is { } k ? kullanicilar.GetValueOrDefault(k) : null))
+                t.KaydedenKullaniciId is { } k ? kullanicilar.GetValueOrDefault(k) : null,
+                t.TeslimEdildi, t.TeslimTarihi, t.TeslimAlan, t.GrupIslemNo))
             .ToList();
     }
 
@@ -137,10 +170,17 @@ public sealed class TahsilatServisi(VeritabaniFabrikasi fabrika, VeriYolu yol)
         using var db = fabrika.Olustur();
         var t = db.Tahsilatlar.Find(tahsilatId) ?? throw new IslemHatasi("Kayıt bulunamadı.");
         if (t.IptalEdildi) throw new IslemHatasi("Kayıt zaten iptal edilmiş.");
-        t.IptalEdildi = true;
-        t.IptalTarihi = DateTime.Now;
-        t.IptalEdenKullaniciId = kullaniciId;
-        t.IptalNedeni = neden.Trim();
+        // Grup ödemesinin bir parçası iptal edilirse ödemenin tamamı iptal edilir.
+        var kayitlar = t.GrupIslemNo is { } g
+            ? db.Tahsilatlar.Where(x => x.GrupIslemNo == g && !x.IptalEdildi).ToList()
+            : [t];
+        foreach (var k in kayitlar)
+        {
+            k.IptalEdildi = true;
+            k.IptalTarihi = DateTime.Now;
+            k.IptalEdenKullaniciId = kullaniciId;
+            k.IptalNedeni = neden.Trim() + (kayitlar.Count > 1 ? " (grup ödemesi)" : "");
+        }
         db.SaveChanges();
     }
 

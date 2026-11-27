@@ -126,6 +126,13 @@ public class Tahsilat : IIptalEdilebilir
     /// <summary>Veri klasörüne kopyalanan dekontun göreli yolu.</summary>
     public string? DekontDosyasi { get; set; }
     public string? Aciklama { get; set; }
+    /// <summary>
+    /// Ofis dışında (eleman, ortak vb.) tahsil edilen paranın ofise teslim edilip edilmediği.
+    /// Tahsil eden boşsa veya "Ofis" ise teslim gerekmez ve kayıt teslim edilmiş sayılır.
+    /// </summary>
+    public bool TeslimEdildi { get; set; } = true;
+    public DateOnly? TeslimTarihi { get; set; }
+    public string? TeslimAlan { get; set; }
     /// <summary>Ödeme grubuna gelen tek ödemenin parçalarını birbirine bağlar.</summary>
     public Guid? GrupIslemNo { get; set; }
     public int? KaydedenKullaniciId { get; set; }

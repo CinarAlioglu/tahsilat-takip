@@ -75,6 +75,14 @@ public static class Secenekler
         new(OdemeYontemi.CekSenet, "Çek / Senet"),
     ];
 
+    public static readonly List<Secenek<GorusmeKanali>> Kanallar =
+    [
+        new(GorusmeKanali.Telefon, "Telefon"),
+        new(GorusmeKanali.WhatsApp, "WhatsApp"),
+        new(GorusmeKanali.YuzYuze, "Yüz yüze"),
+        new(GorusmeKanali.Diger, "Diğer"),
+    ];
+
     public static readonly List<Secenek<KullaniciRolu>> Roller =
     [
         new(KullaniciRolu.Kullanici, "Kullanıcı"),
@@ -103,6 +111,14 @@ public sealed class EnumAciklamaDonusturucu : IValueConverter
         TahakkukKaynagi.Otomatik => "Otomatik",
         TahakkukKaynagi.Manuel => "Elle",
         TahakkukKaynagi.Devir => "Devir",
+        GorusmeKanali.Telefon => "Telefon",
+        GorusmeKanali.WhatsApp => "WhatsApp",
+        GorusmeKanali.YuzYuze => "Yüz yüze",
+        GorusmeKanali.Diger => "Diğer",
+        SozDurumu.Bekliyor => "Bekliyor",
+        SozDurumu.Tutuldu => "Tutuldu",
+        SozDurumu.Tutulmadi => "Tutulmadı",
+        SozDurumu.Yok => "",
         EkstreSatirTuru.Borc => "Borç",
         EkstreSatirTuru.Odeme => "Ödeme",
         _ => value?.ToString(),
@@ -187,4 +203,41 @@ public static class PencereYardimcisi
         // Etkin pencere yoksa (ör. başka uygulamaya geçilmişse) en son açılan görünür pencere en üsttedir.
         return acik.FirstOrDefault(w => w.IsActive) ?? acik.LastOrDefault() ?? Application.Current.MainWindow;
     }
+}
+
+public sealed class AyDurumuMetniDonusturucu : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
+    {
+        AyDurumu.Odendi => "✓",
+        AyDurumu.Kismi => "½",
+        AyDurumu.Acik => "✗",
+        _ => "",
+    };
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
+}
+
+public sealed class AyDurumuRengiDonusturucu : IValueConverter
+{
+    private static readonly Brush Yesil = Dondur(Color.FromRgb(0xDF, 0xF6, 0xDD));
+    private static readonly Brush Sari = Dondur(Color.FromRgb(0xFF, 0xF4, 0xCE));
+    private static readonly Brush Kirmizi = Dondur(Color.FromRgb(0xFD, 0xE7, 0xE9));
+
+    private static Brush Dondur(Color c)
+    {
+        var b = new SolidColorBrush(c);
+        b.Freeze();
+        return b;
+    }
+
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value switch
+    {
+        AyDurumu.Odendi => Yesil,
+        AyDurumu.Kismi => Sari,
+        AyDurumu.Acik => Kirmizi,
+        _ => Brushes.Transparent,
+    };
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }

@@ -29,6 +29,7 @@ public partial class MukellefKartiPenceresi
             App.Servisler.GetRequiredService<MukellefServisi>(),
             App.Servisler.GetRequiredService<TahakkukServisi>(),
             App.Servisler.GetRequiredService<TahsilatServisi>(),
+            App.Servisler.GetRequiredService<GorusmeServisi>(),
             App.Servisler.GetRequiredService<Oturum>());
         model.Yukle(mukellefId);
         var pencere = new MukellefKartiPenceresi(model) { Owner = PencereYardimcisi.Sahip() };
@@ -41,7 +42,8 @@ public sealed record PlanSatiri(
     int Id, string Hizmet, UcretPeriyodu Periyot, decimal Tutar, string Baslangic, string Bitis, string? Aciklama);
 
 public partial class MukellefKartiModeli(
-    MukellefServisi servis, TahakkukServisi borclar, TahsilatServisi tahsilatlar, Oturum oturum) : ObservableObject
+    MukellefServisi servis, TahakkukServisi borclar, TahsilatServisi tahsilatlar, GorusmeServisi gorusmeler, Oturum oturum)
+    : ObservableObject
 {
     private Mukellef _mukellef = new();
 
@@ -55,6 +57,7 @@ public partial class MukellefKartiModeli(
 
     public ObservableCollection<PlanSatiri> Planlar { get; } = [];
     public ObservableCollection<EkstreSatiri> Ekstre { get; } = [];
+    public ObservableCollection<GorusmeSatiri> Gorusmeler { get; } = [];
 
     [ObservableProperty] private int _seciliSekme;
     [ObservableProperty] private bool _yeniKayit = true;
@@ -122,7 +125,30 @@ public partial class MukellefKartiModeli(
         BasliklariGuncelle();
         PlanlariYukle();
         CariYukle();
+        GorusmeleriYukle();
     }
+
+    private void GorusmeleriYukle()
+    {
+        gorusmeler.SozleriGuncelle(DateOnly.FromDateTime(DateTime.Today));
+        Gorusmeler.Clear();
+        foreach (var g in gorusmeler.Listele(_mukellef.Id)) Gorusmeler.Add(g);
+    }
+
+    [RelayCommand]
+    private void GorusmeEkle()
+    {
+        if (!GorusmePenceresi.Ac(_mukellef.Id)) return;
+        DegisiklikVar = true;
+        GorusmeleriYukle();
+        SeciliSekme = 2;
+    }
+
+    [RelayCommand]
+    private Task MesajKopyala() => OrtakIslemler.MesajiKopyala(_mukellef.Id);
+
+    [RelayCommand]
+    private void Pdf() => OrtakIslemler.EkstrePdf(_mukellef.Id, _mukellef.Unvan);
 
     private void BasliklariGuncelle()
     {
@@ -257,7 +283,7 @@ public partial class MukellefKartiModeli(
         if (!TahsilatPenceresi.Ac(_mukellef.Id)) return;
         DegisiklikVar = true;
         CariYukle();
-        SeciliSekme = 2;
+        SeciliSekme = 3;
     }
 
     [RelayCommand]
@@ -266,7 +292,7 @@ public partial class MukellefKartiModeli(
         if (!BorcPenceresi.Ac(_mukellef.Id)) return;
         DegisiklikVar = true;
         CariYukle();
-        SeciliSekme = 2;
+        SeciliSekme = 3;
     }
 
     [RelayCommand]

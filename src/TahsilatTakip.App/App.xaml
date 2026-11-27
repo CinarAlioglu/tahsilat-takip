@@ -13,6 +13,8 @@
 
             <y:EnumAciklamaDonusturucu x:Key="EnumAciklama" />
             <y:BakiyeRengiDonusturucu x:Key="BakiyeRengi" />
+            <y:AyDurumuMetniDonusturucu x:Key="AyMetni" />
+            <y:AyDurumuRengiDonusturucu x:Key="AyRengi" />
             <y:BoolGorunurlukDonusturucu x:Key="BoolGorunur" />
             <y:BoolGorunurlukDonusturucu x:Key="BoolGizli" Ters="True" />
             <y:BoolTersDonusturucu x:Key="BoolTers" />

@@ -39,6 +39,42 @@
                 </ui:Card>
             </UniformGrid>
 
+            <!-- Ödeme sözleri ve teslim -->
+            <Grid Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ui:Card Grid.Column="0" VerticalAlignment="Stretch">
+                    <StackPanel>
+                        <DockPanel>
+                            <ui:Button DockPanel.Dock="Right" Appearance="Transparent" Content="Takip ekranına git →" Click="TakipeGit_Click" />
+                            <TextBlock Style="{StaticResource AltBaslik}" Text="Ödeme sözleri" />
+                        </DockPanel>
+                        <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" Text="{Binding SozOzeti}" TextWrapping="Wrap" />
+                        <ItemsControl ItemsSource="{Binding YakinSozler}" Margin="0,8,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="0,2">
+                                        <TextBlock DockPanel.Dock="Right" Text="{Binding SozDurumu, Converter={StaticResource EnumAciklama}}" Width="80" />
+                                        <TextBlock DockPanel.Dock="Left" Width="90" Text="{Binding SozTarihi, StringFormat=dd.MM.yyyy}" />
+                                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Unvan}" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ui:Card>
+                <ui:Card Grid.Column="2" VerticalAlignment="Stretch">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource AltBaslik}" Text="Ofise teslim bekleyen" />
+                        <TextBlock FontSize="24" FontWeight="SemiBold" Text="{Binding TeslimTutari, StringFormat={}{0:N0} ₺}" />
+                        <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" Text="{Binding TeslimOzeti}" />
+                    </StackPanel>
+                </ui:Card>
+            </Grid>
+
             <!-- Otomatik borç yazma -->
             <ui:Card Margin="0,12,0,0">
                 <StackPanel>

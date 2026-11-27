@@ -23,6 +23,8 @@ public partial class AnaPencere
         Loaded += (_, _) => Gezinti.Navigate(typeof(AnaPanelSayfasi));
     }
 
+    public void Git(Type sayfa) => Gezinti.Navigate(sayfa);
+
     private void Cikis_Click(object sender, RoutedEventArgs e)
     {
         _cikisYapiliyor = true;

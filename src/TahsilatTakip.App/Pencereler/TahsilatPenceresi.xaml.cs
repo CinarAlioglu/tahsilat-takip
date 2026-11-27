@@ -17,7 +17,11 @@ public partial class TahsilatPenceresi
         DataContext = model;
         InitializeComponent();
         model.Kapat = () => DialogResult = true;
-        model.YeniKayitaHazir = () => (model.MukellefSabit ? TutarKutusu : (System.Windows.UIElement)MukellefKutusu).Focus();
+        model.YeniKayitaHazir = () =>
+        {
+            if (model.MukellefSabit) TutarKutusu.Focus();
+            else MukellefKutusu.Focus();
+        };
         Loaded += (_, _) => model.YeniKayitaHazir();
     }
 

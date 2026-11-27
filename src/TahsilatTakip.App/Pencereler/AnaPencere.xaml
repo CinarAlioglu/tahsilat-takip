@@ -26,10 +26,18 @@
                                        TargetPageType="{x:Type s:AnaPanelSayfasi}" />
                 <ui:NavigationViewItem Content="Mükellefler" Icon="{ui:SymbolIcon People24}"
                                        TargetPageType="{x:Type s:MukelleflerSayfasi}" />
+                <ui:NavigationViewItem Content="Takip" Icon="{ui:SymbolIcon Call24}"
+                                       TargetPageType="{x:Type s:TakipSayfasi}" />
+                <ui:NavigationViewItem Content="Aylık durum" Icon="{ui:SymbolIcon CalendarMonth24}"
+                                       TargetPageType="{x:Type s:AylikDurumSayfasi}" />
                 <ui:NavigationViewItem Content="Tahsilatlar" Icon="{ui:SymbolIcon ReceiptMoney24}"
                                        TargetPageType="{x:Type s:TahsilatlarSayfasi}" />
                 <ui:NavigationViewItem Content="Borçlar" Icon="{ui:SymbolIcon DocumentTable24}"
                                        TargetPageType="{x:Type s:BorclarSayfasi}" />
+                <ui:NavigationViewItem Content="Ödeme grupları" Icon="{ui:SymbolIcon PeopleTeam24}"
+                                       TargetPageType="{x:Type s:GruplarSayfasi}" />
+                <ui:NavigationViewItem Content="Raporlar" Icon="{ui:SymbolIcon DataBarVertical24}"
+                                       TargetPageType="{x:Type s:RaporlarSayfasi}" />
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="Ayarlar" Icon="{ui:SymbolIcon Settings24}"

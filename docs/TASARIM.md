@@ -23,5 +23,20 @@ Tahsil eden (Ofis / Eleman / ...), hesap (paranın geldiği yer), ödeyen kişi,
 ## Aşamalar
 1. ✅ İskelet, veritabanı, giriş, mükellefler, ücret planları, devir, cari ekstre, otomatik borç yazma, Excel aktarımı, yedekleme
 2. ✅ Tahsilat girişi ve listesi, elle borç (ek hizmet), borç/ödeme iptali
-3. Görüşmeler ve ödeme sözleri, ödeme grupları
-4. Gecikenler, raporlar (Excel/PDF), işlem günlüğü ekranı
+3. ✅ Görüşmeler ve ödeme sözleri, ödeme grupları, gecikenler (yaşlandırma), aylık durum tablosu,
+   hatırlatma mesajı, PDF ekstre, Excel raporları, eleman tahsilatı teslim takibi, ortadan mükellef arama
+4. İşlem günlüğü ekranı, çok kullanıcılı sunucu sürümü
+
+## Ödeme sözleri
+- Görüşmede söz tarihi (ve isteğe bağlı tutar) girilir. Görüşmeden sonraki ödemeler söz tutarına (tutar yoksa herhangi
+  bir ödemeye) ulaşınca söz "Tutuldu"; söz tarihi geçip ulaşmazsa "Tutulmadı" olur.
+- Yeni söz alınınca aynı mükellefin bekleyen eski sözü "Tutulmadı" sayılır. Tutulmayan söz, mükellefle yeniden
+  görüşülünce takipten düşer.
+
+## Ödeme grupları
+- Gruba gelen ödeme üyelerin açık borçlarına en eskiden başlayarak dağıtılır; artan kısım ilk üyeye (alfabetik) avans.
+- Her üye için ayrı tahsilat kaydı oluşur, aynı işlem numarasıyla bağlıdır; birinin iptali hepsini iptal eder.
+
+## Teslim takibi
+- "Tahsil eden" boş veya "Ofis" değilse tahsilat "teslim bekliyor" olarak başlar; Tahsilatlar ekranından toplu
+  "ofise teslim alındı" işaretlenir.

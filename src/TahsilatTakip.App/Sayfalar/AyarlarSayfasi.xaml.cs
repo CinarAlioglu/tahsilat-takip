@@ -57,7 +57,7 @@ public partial class AyarlarSayfasi
 }
 
 public partial class AyarlarModeli(
-    KullaniciServisi kullanicilar, YedekServisi yedek, VeriYolu yol, Oturum oturum) : ObservableObject
+    KullaniciServisi kullanicilar, YedekServisi yedek, VeriYolu yol, Oturum oturum, AyarServisi ayarlar) : ObservableObject
 {
     public ObservableCollection<Kullanici> Kullanicilar { get; } = [];
     public List<Secenek<KullaniciRolu>> Roller => Secenekler.Roller;
@@ -71,12 +71,18 @@ public partial class AyarlarModeli(
     [ObservableProperty] private Secenek<KullaniciRolu> _yeniRol = Secenekler.Roller[0];
     [ObservableProperty] private string _sonYedek = "";
     [ObservableProperty] private string? _ekKlasor;
+    [ObservableProperty] private string? _ofisAdi;
+    [ObservableProperty] private string? _ofisTelefonu;
+    [ObservableProperty] private string? _mesajIban;
 
     public void Yukle()
     {
         Kullanicilar.Clear();
         foreach (var k in kullanicilar.Listele()) Kullanicilar.Add(k);
         EkKlasor = yedek.EkKlasor();
+        OfisAdi = ayarlar.Oku(AyarServisi.OfisAdi);
+        OfisTelefonu = ayarlar.Oku(AyarServisi.OfisTelefonu);
+        MesajIban = ayarlar.Oku(AyarServisi.MesajIban);
         SonYedekGuncelle();
     }
 
@@ -84,6 +90,15 @@ public partial class AyarlarModeli(
     {
         var son = yedek.SonYedekTarihi();
         SonYedek = son is null ? "Henüz yedek alınmadı." : $"Son yedek: {son:dd.MM.yyyy HH:mm}";
+    }
+
+    [RelayCommand]
+    private async Task OfisKaydet()
+    {
+        ayarlar.Yaz(AyarServisi.OfisAdi, OfisAdi);
+        ayarlar.Yaz(AyarServisi.OfisTelefonu, OfisTelefonu);
+        ayarlar.Yaz(AyarServisi.MesajIban, MesajIban);
+        await Mesaj.Bilgi("Ofis bilgileri", "Kaydedildi.");
     }
 
     [RelayCommand]
