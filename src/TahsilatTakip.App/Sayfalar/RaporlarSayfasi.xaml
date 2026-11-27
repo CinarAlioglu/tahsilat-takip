@@ -1,0 +1,67 @@
+<Page x:Class="TahsilatTakip.App.Sayfalar.RaporlarSayfasi"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:k="clr-namespace:TahsilatTakip.App.Kontroller"
+      Title="Raporlar">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="900" HorizontalAlignment="Left" Margin="0,0,8,0">
+            <TextBlock Style="{StaticResource SayfaBasligi}" Text="Raporlar" />
+
+            <ui:Card>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource AltBaslik}" Text="Tahsilat raporu (Excel)" />
+                    <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Seçilen tarihler arasındaki tüm tahsilatlar; ayrı sayfada tahsil eden kişiye, aya ve ödeme yöntemine göre toplamlar." />
+                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                        <DatePicker Width="140" SelectedDate="{Binding Baslangic}" />
+                        <TextBlock VerticalAlignment="Center" Margin="8,0" Text="–" />
+                        <DatePicker Width="140" SelectedDate="{Binding Bitis}" />
+                        <ui:Button Margin="16,0,0,0" Appearance="Primary" Icon="{ui:SymbolIcon ArrowDownload24}" Content="Excel oluştur"
+                                   Command="{Binding TahsilatRaporuCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
+
+            <ui:Card Margin="0,12,0,0">
+                <DockPanel>
+                    <ui:Button DockPanel.Dock="Right" VerticalAlignment="Center" Icon="{ui:SymbolIcon ArrowDownload24}" Content="Excel oluştur"
+                               Command="{Binding BakiyeListesiCommand}" />
+                    <StackPanel Margin="0,0,16,0">
+                        <TextBlock Style="{StaticResource AltBaslik}" Text="Bakiye listesi (Excel)" />
+                        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="Bugün itibarıyla tüm mükelleflerin bakiyesi, gecikme günü ve 0-30 / 31-60 / 61-90 / 90+ gün dağılımı." />
+                    </StackPanel>
+                </DockPanel>
+            </ui:Card>
+
+            <ui:Card Margin="0,12,0,0">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ComboBox Width="100" ItemsSource="{Binding Yillar}" SelectedItem="{Binding Yil}" />
+                        <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon ArrowDownload24}" Content="Excel oluştur"
+                                   Command="{Binding AylikDurumCommand}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,16,0">
+                        <TextBlock Style="{StaticResource AltBaslik}" Text="Aylık ödeme durumu (Excel)" />
+                        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="Eski Excel listesindeki gibi: her mükellef için ödenen ve ödenmeyen aylar, renkli." />
+                    </StackPanel>
+                </DockPanel>
+            </ui:Card>
+
+            <ui:Card Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource AltBaslik}" Text="Mükellef cari ekstresi (PDF)" />
+                    <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Mükellefe gönderilebilecek ekstre. Ofis adı, telefon ve IBAN Ayarlar'dan alınır; tahsil eden gibi ofis içi bilgiler yazılmaz." />
+                    <DockPanel Margin="0,12,0,0">
+                        <ui:Button DockPanel.Dock="Right" Margin="8,0,0,0" Icon="{ui:SymbolIcon DocumentPdf24}" Content="PDF oluştur"
+                                   Command="{Binding EkstreCommand}" />
+                        <k:MukellefSecici Mukellefler="{Binding Mukellefler}" Secili="{Binding EkstreMukellefi}" />
+                    </DockPanel>
+                </StackPanel>
+            </ui:Card>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

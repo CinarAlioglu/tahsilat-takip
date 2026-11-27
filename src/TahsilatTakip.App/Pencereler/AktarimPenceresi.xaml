@@ -1,0 +1,50 @@
+<ui:FluentWindow x:Class="TahsilatTakip.App.Pencereler.AktarimPenceresi"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Excel'den mükellef aktarımı" Width="1050" Height="720"
+                 WindowStartupLocation="CenterOwner"
+                 ExtendsContentIntoTitleBar="True" WindowBackdropType="Mica">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ui:TitleBar Grid.Row="0" Title="Excel'den mükellef aktarımı" ShowMinimize="False" />
+
+        <StackPanel Grid.Row="1" Margin="24,0,24,12">
+            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                "Mükellef Aktarım Listesi" biçimindeki Excel dosyasını seçin. Mükellefler ve ücretleri aktarılır; ödemeler aktarılmaz.
+                Geçmiş borçları her mükellefin kartından "Devir" olarak girin.
+            </TextBlock>
+            <WrapPanel Margin="0,12,0,0">
+                <ui:Button Icon="{ui:SymbolIcon FolderOpen24}" Content="Dosya seç..." Command="{Binding DosyaSecCommand}" />
+                <TextBlock VerticalAlignment="Center" Margin="12,0" Text="{Binding DosyaAdi}" TextTrimming="CharacterEllipsis" MaxWidth="360" />
+                <TextBlock VerticalAlignment="Center" Margin="12,0,8,0" Text="Borç yazmaya başlanacak ay:" />
+                <ComboBox Width="150" ItemsSource="{Binding Aylar}" SelectedItem="{Binding GecisAyi}" />
+            </WrapPanel>
+            <TextBlock Margin="0,8,0,0" TextWrapping="Wrap" FontStyle="Italic" Text="{Binding GecisAciklamasi}" />
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" Margin="24,0" ItemsSource="{Binding Satirlar}" AutoGenerateColumns="False"
+                  CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Aktar" Binding="{Binding Secili, UpdateSourceTrigger=PropertyChanged}" Width="60" />
+                <DataGridTextColumn Header="Ünvan" Binding="{Binding Unvan}" Width="*" IsReadOnly="True" />
+                <DataGridTextColumn Header="Periyot" Binding="{Binding PeriyotMetni}" Width="80" IsReadOnly="True" />
+                <DataGridTextColumn Header="Ücret" Binding="{Binding Ucret, StringFormat=N2}" Width="100" IsReadOnly="True"
+                                    ElementStyle="{StaticResource SagaYasli}" />
+                <DataGridTextColumn Header="Ödeme" Binding="{Binding OdemeTercihi, Converter={StaticResource EnumAciklama}}" Width="70" IsReadOnly="True" />
+                <DataGridTextColumn Header="Uyarı" Binding="{Binding UyariMetni}" Width="240" IsReadOnly="True" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel Grid.Row="3" Margin="24,12,24,24">
+            <ui:Button DockPanel.Dock="Right" Appearance="Primary" Icon="{ui:SymbolIcon ArrowImport24}"
+                       Content="Seçilenleri aktar" Command="{Binding AktarCommand}" />
+            <TextBlock VerticalAlignment="Center" Text="{Binding Ozet}" />
+        </DockPanel>
+    </Grid>
+</ui:FluentWindow>

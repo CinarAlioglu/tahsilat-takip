@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TahsilatTakip.App/TahsilatTakip.App.csproj" />
+    <Project Path="src/TahsilatTakip.Core/TahsilatTakip.Core.csproj" />
+    <Project Path="src/TahsilatTakip.Data/TahsilatTakip.Data.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TahsilatTakip.Tests/TahsilatTakip.Tests.csproj" />
+  </Folder>
+</Solution>

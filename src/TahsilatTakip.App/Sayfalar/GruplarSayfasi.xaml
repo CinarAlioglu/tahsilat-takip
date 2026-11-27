@@ -1,0 +1,86 @@
+<Page x:Class="TahsilatTakip.App.Sayfalar.GruplarSayfasi"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:k="clr-namespace:TahsilatTakip.App.Kontroller"
+      Title="Ödeme grupları">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <ui:Button DockPanel.Dock="Right" VerticalAlignment="Top" Appearance="Primary" Icon="{ui:SymbolIcon Add24}"
+                       Content="Yeni grup" Command="{Binding YeniCommand}" />
+            <TextBlock Style="{StaticResource SayfaBasligi}" Text="Ödeme grupları" />
+        </DockPanel>
+        <TextBlock Grid.Row="1" Margin="0,0,0,12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                   Text="Birden çok mükellefin borcunu tek kişi ödüyorsa (ör. şirket ve sahibinin şahıs firması) onları bir grupta toplayın. Gruba gelen ödeme, üyelerin açık borçlarına en eskiden başlayarak dağıtılır; artan kısım ilk üyeye avans yazılır." />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Grid.Column="0" Style="{StaticResource Tablo}" ItemsSource="{Binding Gruplar}" SelectedItem="{Binding Secili}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Grup" Binding="{Binding Ad}" Width="*" />
+                    <DataGridTextColumn Header="Üye" Binding="{Binding Uyeler.Count}" Width="50" />
+                    <DataGridTemplateColumn Header="Toplam bakiye" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Style="{StaticResource SagaYasli}" FontWeight="SemiBold" Text="{Binding ToplamBakiye, StringFormat=N2}"
+                                           Foreground="{Binding ToplamBakiye, Converter={StaticResource BakiyeRengi}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <ui:Card Grid.Column="2" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+                     Visibility="{Binding Secili, Converter={StaticResource DoluysaGorunur}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ReceiptMoney24}" Content="Grup tahsilatı al"
+                                       Command="{Binding TahsilatCommand}" />
+                            <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Edit24}" ToolTip="Yeniden adlandır" Command="{Binding AdlandirCommand}" />
+                            <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon Delete24}" ToolTip="Grubu sil" Command="{Binding SilCommand}" />
+                        </StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" Text="{Binding Secili.Ad}" />
+                    </DockPanel>
+                    <DataGrid Grid.Row="1" Style="{StaticResource Tablo}" ItemsSource="{Binding Secili.Uyeler}" SelectedItem="{Binding SeciliUye}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Üye mükellef" Binding="{Binding Unvan}" Width="*" />
+                            <DataGridTemplateColumn Header="Bakiye" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Style="{StaticResource SagaYasli}" FontWeight="SemiBold" Text="{Binding Bakiye, StringFormat=N2}"
+                                                   Foreground="{Binding Bakiye, Converter={StaticResource BakiyeRengi}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="2" Margin="0,12,0,0">
+                        <ui:Button HorizontalAlignment="Right" Icon="{ui:SymbolIcon Dismiss24}" Content="Seçili üyeyi gruptan çıkar"
+                                   Command="{Binding UyeCikarCommand}" />
+                        <TextBlock Style="{StaticResource AlanEtiketi}" Text="Gruba mükellef ekle" />
+                        <DockPanel>
+                            <ui:Button DockPanel.Dock="Right" Margin="8,0,0,0" Icon="{ui:SymbolIcon Add24}" Content="Ekle" Command="{Binding UyeEkleCommand}" />
+                            <k:MukellefSecici Mukellefler="{Binding Mukellefler}" Secili="{Binding EklenecekMukellef}" />
+                        </DockPanel>
+                    </StackPanel>
+                </Grid>
+            </ui:Card>
+        </Grid>
+    </Grid>
+</Page>
